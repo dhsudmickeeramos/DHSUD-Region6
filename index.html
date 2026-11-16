@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DHSUD Region VI · Employee Directory</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            color: #1e293b;
+            padding: 24px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* HEADER */
+        .header {
+            margin-bottom: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo {
+            height: 60px;
+            width: auto;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .header h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: #0b3b5c;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .badge-region {
+            background: #e8f0fe;
+            color: #0b3b5c;
+            font-weight: 600;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            border: 1px solid #cdddec;
+        }
+
+        .badge-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            padding: 6px 14px;
+            border-radius: 40px;
+            background: #fef9e7;
+            color: #7a6e2e;
+            border: 1px solid #f5e9b8;
+        }
+
+        .badge-status.online {
+            background: #e3f2e9;
+            color: #0f6e3f;
+            border-color: #b8e0c8;
+        }
+
+        .badge-status i {
+            font-size: 0.65rem;
+        }
+
+        /* CARD */
+        .card {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(0, 20, 30, 0.06);
+            border: 1px solid #e9eef3;
+            overflow: hidden;
+            margin-bottom: 28px;
+        }
+
+        .card-header {
+            padding: 20px 26px;
+            background: #fafcff;
+            border-bottom: 1px solid #e2e9f0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-header i {
+            font-size: 1.5rem;
+            color: #1e7e8c;
+            background: #e1f0f2;
+            padding: 10px;
+            border-radius: 12px;
+        }
+
+        .card-header h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #0b3b5c;
+        }
+
+        /* FORM GRID */
+        .form-grid {
+            padding: 26px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 18px 22px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .input-group label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: #4b5e6e;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .input-group label i {
+            font-size: 0.75rem;
+            color: #1e7e8c;
+        }
+
+        .input-group input, 
+        .input-group select {
+            padding: 11px 14px;
+            border: 1.5px solid #dbe2ea;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            background: #ffffff;
+            transition: 0.2s;
+            color: #1e293b;
+            width: 100%;
+        }
+
+        .input-group input:focus, 
+        .input-group select:focus {
+            outline: none;
+            border-color: #1e7e8c;
+            box-shadow: 0 0 0 3px rgba(30, 126, 140, 0.12);
+        }
+
+        .input-group input::placeholder {
+            color: #a0b3c4;
+        }
+
+        .span-2 {
+            grid-column: span 2;
+        }
+
+        /* BUTTONS */
+        .form-actions {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: flex-end;
+            gap: 14px;
+            margin-top: 6px;
+            padding-top: 10px;
+            border-top: 1px dashed #d9e2ec;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+            letter-spacing: 0.01em;
+        }
+
+        .btn-primary {
+            background: #1e7e8c;
+            color: white;
+            box-shadow: 0 4px 10px rgba(30, 126, 140, 0.25);
+        }
+
+        .btn-primary:hover {
+            background: #156673;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 14px rgba(30, 126, 140, 0.35);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 1.5px solid #cdddec;
+            color: #2c4e63;
+        }
+
+        .btn-outline:hover {
+            background: #f2f7fc;
+            border-color: #1e7e8c;
+        }
+
+        .btn-refresh {
+            background: #ffffff;
+            border: 1.5px solid #cdddec;
+            color: #2c4e63;
+            padding: 8px 18px;
+            font-size: 0.8rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+        }
+
+        .btn-refresh:hover {
+            background: #f2f7fc;
+            border-color: #1e7e8c;
+        }
+
+        /* TABLE */
+        .table-wrapper {
+            overflow-x: auto;
+            padding: 0 6px 6px 6px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            min-width: 1800px;
+        }
+
+        th {
+            text-align: left;
+            padding: 16px 12px;
+            background: #f2f7fc;
+            color: #1a465c;
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            border-bottom: 2px solid #d2e1ee;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #e9eef3;
+            vertical-align: middle;
+            color: #2c3e50;
+            white-space: nowrap;
+        }
+
+        tr:hover td {
+            background: #fafdff;
+        }
+
+        .empty-row td {
+            text-align: center;
+            padding: 48px 20px;
+            color: #8699aa;
+            font-style: italic;
+            font-size: 0.95rem;
+        }
+
+        .employee-count {
+            font-weight: 500;
+            color: #3d677f;
+            background: #e9f1f7;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #0b3b5c;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 14px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            box-shadow: 0 12px 30px rgba(0, 20, 30, 0.25);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: 0.3s;
+            pointer-events: none;
+            z-index: 9999;
+            max-width: 400px;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast.success {
+            background: #0f6e3f;
+        }
+
+        .toast.error {
+            background: #b53a3a;
+        }
+
+        .toast i {
+            font-size: 1.2rem;
+        }
+
+        /* loading overlay */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(2px);
+            z-index: 9998;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid #dbe2ea;
+            border-top-color: #1e7e8c;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 16px; }
+            .form-grid { grid-template-columns: 1fr; padding: 18px; }
+            .span-2 { grid-column: span 1; }
+            .header h1 { font-size: 1.4rem; }
+            .logo { height: 44px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Loading overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+</div>
+
+<!-- Toast notification -->
+<div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toastMessage">Saved</span>
+</div>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="header-left">
+            <img 
+                src="https://raw.githubusercontent.com/yourusername/yourrepo/main/DHSUD_LOGO.png" 
+                alt="DHSUD Logo" 
+                class="logo"
+                id="dhsudLogo"
+                onerror="this.style.display='none'"
+            >
+            <h1>
+                <i class="fas fa-users" style="color:#1e7e8c;"></i> 
+                DHSUD Region VI · Employee Directory
+            </h1>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+            <span class="badge-region"><i class="fas fa-map-pin" style="margin-right: 6px;"></i>Region VI – Western Visayas</span>
+            <span class="badge-status" id="connectionStatus">
+                <i class="fas fa-circle"></i> Connecting...
+            </span>
+        </div>
+    </div>
+
+    <!-- ADD EMPLOYEE CARD -->
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-user-plus"></i>
+            <h2>Add New Employee</h2>
+        </div>
+        <form id="employeeForm">
+            <div class="form-grid">
+                <div class="input-group span-2">
+                    <label><i class="fas fa-id-card"></i> Complete Name</label>
+                    <input type="text" id="fullName" placeholder="e.g. Juan D. Dela Cruz" required>
+                </div>
+                <div class="input-group span-2">
+                    <label><i class="fas fa-home"></i> Address</label>
+                    <input type="text" id="address" placeholder="Street, Barangay, City, Province" required>
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-calendar-alt"></i> Birthday</label>
+                    <input type="date" id="birthday" required>
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-tint"></i> Blood Type</label>
+                    <select id="bloodType" required>
+                        <option value="">Select</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-phone-alt"></i> Contact Number</label>
+                    <input type="text" id="contactNumber" placeholder="e.g. 0917 123 4567" required>
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-user-friends"></i> Emergency Contact Person</label>
+                    <input type="text" id="emergencyPerson" placeholder="Full name" required>
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-phone-volume"></i> Emergency Contact No.</label>
+                    <input type="text" id="emergencyNumber" placeholder="e.g. 0918 987 6543" required>
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fas fa-briefcase"></i> Position</label>
+                    <input type="text" id="position" placeholder="e.g. Administrative Officer" required>
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-layer-group"></i> Salary Grade</label>
+                    <input type="text" id="salaryGrade" placeholder="e.g. SG-18" required>
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-money-bill-wave"></i> Salary</label>
+                    <input type="text" id="salary" placeholder="e.g. 45,000.00" required>
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-building"></i> Division</label>
+                    <input type="text" id="division" placeholder="e.g. Administrative Division" required>
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-user-check"></i> Employment Status</label>
+                    <select id="employmentStatus" required>
+                        <option value="">Select</option>
+                        <option value="Permanent">Permanent</option>
+                        <option value="Contractual">Contractual</option>
+                        <option value="Job Order">Job Order</option>
+                        <option value="Casual">Casual</option>
+                        <option value="Contract of Service">Contract of Service</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-calendar-check"></i> Start Date</label>
+                    <input type="date" id="startDate" required>
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fas fa-id-badge"></i> GSIS No.</label>
+                    <input type="text" id="gsisNo" placeholder="GSIS number" required>
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-id-card"></i> SSS No.</label>
+                    <input type="text" id="sssNo" placeholder="SSS number" required>
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-file-invoice"></i> TIN No.</label>
+                    <input type="text" id="tinNo" placeholder="TIN number" required>
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-piggy-bank"></i> PAG-IBIG No.</label>
+                    <input type="text" id="pagibigNo" placeholder="Pag-IBIG number" required>
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-heartbeat"></i> PHILHEALTH Number</label>
+                    <input type="text" id="philhealthNo" placeholder="PhilHealth number" required>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" id="clearBtn">
+                        <i class="fas fa-undo-alt"></i> Clear
+                    </button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        <i class="fas fa-save"></i> Add Employee
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- EMPLOYEE TABLE CARD -->
+    <div class="card">
+        <div class="card-header" style="justify-content: space-between; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <i class="fas fa-table"></i>
+                <h2>Employee List</h2>
+            </div>
+            <div style="display:flex; align-items:center; gap:12px;">
+                <span class="employee-count" id="employeeCount">0 employees</span>
+                <button class="btn-refresh" id="refreshBtn" title="Reload from Google Sheets">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+        </div>
+        <div class="table-wrapper">
+            <table id="employeeTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Complete Name</th>
+                        <th>Address</th>
+                        <th>Birthday</th>
+                        <th>Blood Type</th>
+                        <th>Contact No.</th>
+                        <th>Emergency Person</th>
+                        <th>Emergency No.</th>
+                        <th>Position</th>
+                        <th>Salary Grade</th>
+                        <th>Salary</th>
+                        <th>Division</th>
+                        <th>Employment Status</th>
+                        <th>Start Date</th>
+                        <th>GSIS No.</th>
+                        <th>SSS No.</th>
+                        <th>TIN No.</th>
+                        <th>PAG-IBIG No.</th>
+                        <th>PHILHEALTH No.</th>
+                    </tr>
+                </thead>
+                <tbody id="employeeTableBody">
+                    <tr class="empty-row">
+                        <td colspan="19">
+                            <i class="fas fa-spinner fa-pulse" style="margin-right:8px;"></i>
+                            Loading employees from Google Sheets...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // =========================================================
+        // CONFIGURATION – Google Apps Script Web App URL
+        // =========================================================
+        const API_URL = "https://script.google.com/macros/s/AKfycbz_Fvh9ddediEmQ485Ki4ye5eBfMi5UFe4offIJGgxm/dev";
+
+        // =========================================================
+        // DOM references
+        // =========================================================
+        const form = document.getElementById('employeeForm');
+        const tableBody = document.getElementById('employeeTableBody');
+        const employeeCountSpan = document.getElementById('employeeCount');
+        const clearBtn = document.getElementById('clearBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toastMessage');
+        const connectionStatus = document.getElementById('connectionStatus');
+        const logoImg = document.getElementById('dhsudLogo');
+
+        // =========================================================
+        // LOGO – Replace with your actual GitHub username/repo
+        // The path below assumes the file is at the repository root.
+        // Example: https://raw.githubusercontent.com/juandelacruz/dhsud-region6/main/DHSUD_LOGO.png
+        // =========================================================
+        // IMPORTANT: Change "yourusername/yourrepo" to your actual GitHub details.
+        // If the image is in a folder, add the folder path: e.g. main/assets/DHSUD_LOGO.png
+        logoImg.src = "https://raw.githubusercontent.com/yourusername/yourrepo/main/DHSUD_LOGO.png";
+
+        // =========================================================
+        // Helper: show toast
+        // =========================================================
+        let toastTimer = null;
+        function showToast(message, type = 'success') {
+            if (toastTimer) clearTimeout(toastTimer);
+            toast.className = 'toast ' + type;
+            const icon = type === 'success' ? 'fa-check-circle' : (type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle');
+            toast.querySelector('i').className = 'fas ' + icon;
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            toastTimer = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 4000);
+        }
+
+        // =========================================================
+        // Helper: escape HTML
+        // =========================================================
+        function escapeHtml(unsafe) {
+            if (!unsafe) return '';
+            return String(unsafe)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // =========================================================
+        // Update employee count & row numbers
+        // =========================================================
+        function refreshTableMeta() {
+            const rows = tableBody.querySelectorAll('tr:not(.empty-row)');
+            const count = rows.length;
+            employeeCountSpan.textContent = count + (count === 1 ? ' employee' : ' employees');
+
+            rows.forEach((row, idx) => {
+                const firstCell = row.cells[0];
+                if (firstCell) firstCell.textContent = idx + 1;
+            });
+        }
+
+        // =========================================================
+        // Render a single employee row
+        // =========================================================
+        function renderEmployeeRow(employee) {
+            const row = document.createElement('tr');
+            // Order: #, Name, Address, Birthday, BloodType, Contact, EmerPerson, EmerNo,
+            //        Position, SalaryGrade, Salary, Division, Status, StartDate,
+            //        GSIS, SSS, TIN, PAGIBIG, PHILHEALTH
+            row.innerHTML = `
+                <td>0</td>
+                <td>${escapeHtml(employee.fullName || '')}</td>
+                <td>${escapeHtml(employee.address || '')}</td>
+                <td>${escapeHtml(employee.birthday || '')}</td>
+                <td>${escapeHtml(employee.bloodType || '')}</td>
+                <td>${escapeHtml(employee.contactNumber || '')}</td>
+                <td>${escapeHtml(employee.emergencyPerson || '')}</td>
+                <td>${escapeHtml(employee.emergencyNumber || '')}</td>
+                <td>${escapeHtml(employee.position || '')}</td>
+                <td>${escapeHtml(employee.salaryGrade || '')}</td>
+                <td>${escapeHtml(employee.salary || '')}</td>
+                <td>${escapeHtml(employee.division || '')}</td>
+                <td>${escapeHtml(employee.employmentStatus || '')}</td>
+                <td>${escapeHtml(employee.startDate || '')}</td>
+                <td>${escapeHtml(employee.gsisNo || '')}</td>
+                <td>${escapeHtml(employee.sssNo || '')}</td>
+                <td>${escapeHtml(employee.tinNo || '')}</td>
+                <td>${escapeHtml(employee.pagibigNo || '')}</td>
+                <td>${escapeHtml(employee.philhealthNo || '')}</td>
+            `;
+            tableBody.appendChild(row);
+        }
+
+        // =========================================================
+        // Fetch all employees from Google Apps Script
+        // =========================================================
+        async function loadEmployees() {
+            loadingOverlay.classList.add('active');
+            connectionStatus.className = 'badge-status';
+            connectionStatus.innerHTML = '<i class="fas fa-circle"></i> Connecting...';
+
+            try {
+                const response = await fetch(API_URL + '?action=getEmployees', {
+                    method: 'GET',
+                    headers: { 'Accept': 'application/json' },
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Server responded with ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                // Expected format: { success: true, employees: [...] } or just an array
+                let employees = [];
+                if (Array.isArray(data)) {
+                    employees = data;
+                } else if (data && Array.isArray(data.employees)) {
+                    employees = data.employees;
+                } else if (data && data.success === false) {
+                    throw new Error(data.message || 'Server error');
+                } else {
+                    throw new Error('Unexpected response format from Google Apps Script.');
+                }
+
+                // Clear table
+                tableBody.innerHTML = '';
+
+                if (employees.length === 0) {
+                    tableBody.innerHTML = `
+                        <tr class="empty-row">
+                            <td colspan="19">
+                                <i class="fas fa-inbox" style="margin-right:8px;"></i>
+                                No employees found. Add your first employee above.
+                            </td>
+                        </tr>`;
+                } else {
+                    employees.forEach(emp => renderEmployeeRow(emp));
+                }
+
+                refreshTableMeta();
+
+                connectionStatus.className = 'badge-status online';
+                connectionStatus.innerHTML = '<i class="fas fa-circle"></i> Connected';
+            } catch (err) {
+                console.error('Load error:', err);
+                tableBody.innerHTML = `
+                    <tr class="empty-row">
+                        <td colspan="19" style="color:#b53a3a;">
+                            <i class="fas fa-exclamation-triangle" style="margin-right:8px;"></i>
+                            Could not load employees: ${escapeHtml(err.message)}
+                        </td>
+                    </tr>`;
+                employeeCountSpan.textContent = '0 employees';
+                connectionStatus.className = 'badge-status';
+                connectionStatus.style.background = '#fce4e4';
+                connectionStatus.style.color = '#b53a3a';
+                connectionStatus.style.borderColor = '#f5c6c6';
+                connectionStatus.innerHTML = '<i class="fas fa-circle"></i> Offline';
+                showToast('Failed to load employees: ' + err.message, 'error');
+            } finally {
+                loadingOverlay.classList.remove('active');
+            }
+        }
+
+        // =========================================================
+        // Submit a new employee to Google Apps Script
+        // =========================================================
+        async function submitEmployee(employee) {
+            const payload = {
+                action: 'addEmployee',
+                fullName: employee.fullName,
+                address: employee.address,
+                birthday: employee.birthday,
+                bloodType: employee.bloodType,
+                contactNumber: employee.contactNumber,
+                emergencyPerson: employee.emergencyPerson,
+                emergencyNumber: employee.emergencyNumber,
+                position: employee.position,
+                salaryGrade: employee.salaryGrade,
+                salary: employee.salary,
+                division: employee.division,
+                employmentStatus: employee.employmentStatus,
+                startDate: employee.startDate,
+                gsisNo: employee.gsisNo,
+                sssNo: employee.sssNo,
+                tinNo: employee.tinNo,
+                pagibigNo: employee.pagibigNo,
+                philhealthNo: employee.philhealthNo,
+            };
+
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                // Using text/plain to avoid CORS preflight, which Apps Script handles well.
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(payload),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Server responded with ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            if (data && data.success === false) {
+                throw new Error(data.message || 'Failed to save employee.');
+            }
+
+            return data;
+        }
+
+        // =========================================================
+        // Form submit handler
+        // =========================================================
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const employee = {
+                fullName: document.getElementById('fullName').value.trim(),
+                address: document.getElementById('address').value.trim(),
+                birthday: document.getElementById('birthday').value,
+                bloodType: document.getElementById('bloodType').value,
+                contactNumber: document.getElementById('contactNumber').value.trim(),
+                emergencyPerson: document.getElementById('emergencyPerson').value.trim(),
+                emergencyNumber: document.getElementById('emergencyNumber').value.trim(),
+                position: document.getElementById('position').value.trim(),
+                salaryGrade: document.getElementById('salaryGrade').value.trim(),
+                salary: document.getElementById('salary').value.trim(),
+                division: document.getElementById('division').value.trim(),
+                employmentStatus: document.getElementById('employmentStatus').value,
+                startDate: document.getElementById('startDate').value,
+                gsisNo: document.getElementById('gsisNo').value.trim(),
+                sssNo: document.getElementById('sssNo').value.trim(),
+                tinNo: document.getElementById('tinNo').value.trim(),
+                pagibigNo: document.getElementById('pagibigNo').value.trim(),
+                philhealthNo: document.getElementById('philhealthNo').value.trim(),
+            };
+
+            // Validation
+            for (const [key, val] of Object.entries(employee)) {
+                if (!val) {
+                    showToast('Please fill in all fields.', 'error');
+                    return;
+                }
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            loadingOverlay.classList.add('active');
+
+            try {
+                await submitEmployee(employee);
+                showToast('Employee added successfully!', 'success');
+                form.reset();
+                document.getElementById('fullName').focus();
+
+                // Reload the list from the server to stay in sync
+                await loadEmployees();
+            } catch (err) {
+                console.error('Submit error:', err);
+                showToast('Failed to save employee: ' + err.message, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-save"></i> Add Employee';
+                loadingOverlay.classList.remove('active');
+            }
+        });
+
+        // =========================================================
+        // Clear form
+        // =========================================================
+        clearBtn.addEventListener('click', function() {
+            form.reset();
+            document.getElementById('fullName').focus();
+        });
+
+        // =========================================================
+        // Refresh button
+        // =========================================================
+        refreshBtn.addEventListener('click', function() {
+            loadEmployees();
+        });
+
+        // =========================================================
+        // Initialize: load employees on page load
+        // =========================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            // The logo src is set above; if the image fails, we hide it via onerror
+            loadEmployees();
+        });
+    })();
+</script>
+</body>
+</html>
