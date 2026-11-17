@@ -1,3 +1,22 @@
+/* =====================================================
+   PHILIPPINE GOVERNMENT THEME
+   Colors: PH flag blue (#0038A8), red (#CE1126),
+   gold/yellow (#FCD116), white
+   ===================================================== */
+:root {
+    --ph-blue: #0038A8;
+    --ph-blue-dark: #002a7a;
+    --ph-blue-light: #e6ecf9;
+    --ph-red: #CE1126;
+    --ph-gold: #FCD116;
+    --ph-gold-dark: #d4ab00;
+    --ph-white: #ffffff;
+    --ph-ink: #1a1f2e;
+    --ph-muted: #5a6478;
+    --ph-border: #dfe3ec;
+    --ph-bg: #f4f6fb;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -6,44 +25,87 @@
 }
 
 body {
-    background: #f4f7fb;
-    padding: 2rem 1.5rem;
-    color: #1e2a41;
+    background: var(--ph-bg);
+    padding: 0 1.5rem 2rem;
+    color: var(--ph-ink);
 }
+
+/* ---------- Government top strip ---------- */
+.gov-topbar {
+    background: var(--ph-blue-dark);
+    color: #fff;
+    margin: 0 -1.5rem 2rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.3px;
+    border-bottom: 4px solid var(--ph-gold);
+}
+.gov-topbar-inner {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 0.45rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+.gov-topbar i { color: var(--ph-gold); margin-right: 0.35rem; }
+.gov-topbar-right { opacity: 0.9; }
 
 .container {
     max-width: 1500px;
     margin: 0 auto;
 }
 
+/* ---------- Header ---------- */
 .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 2rem;
+    margin-bottom: 1.2rem;
     flex-wrap: wrap;
     gap: 1rem;
 }
 
-.logo-area h1 {
-    font-size: 2.1rem;
-    font-weight: 600;
-    color: #0b2b4b;
+.logo-area {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 1rem;
 }
 
-.logo-area h1 i {
-    color: #1e6f9f;
-    font-size: 2.2rem;
+.gov-logo {
+    width: 68px;
+    height: 68px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));
 }
 
-.logo-area p {
-    color: #4a5f7a;
+.gov-logo-fallback {
+    width: 68px;
+    height: 68px;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    color: var(--ph-white);
+    background: var(--ph-blue);
+    border-radius: 50%;
+    border: 3px solid var(--ph-gold);
+}
+
+.logo-text h1 {
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: var(--ph-blue-dark);
+    letter-spacing: 0.2px;
+    line-height: 1.1;
+}
+
+.logo-text p {
+    color: var(--ph-muted);
     font-weight: 400;
-    margin-top: 0.2rem;
+    margin-top: 0.35rem;
     letter-spacing: 0.3px;
+    font-size: 0.88rem;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -51,48 +113,57 @@ body {
 }
 
 .badge {
-    background: #e1ecf7;
-    padding: 0.5rem 1.2rem;
-    border-radius: 40px;
-    color: #0b2b4b;
-    font-weight: 500;
+    background: var(--ph-blue);
+    padding: 0.6rem 1.3rem;
+    border-radius: 6px;
+    color: #fff;
+    font-weight: 600;
     font-size: 0.9rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+    border-left: 4px solid var(--ph-gold);
+    box-shadow: 0 2px 6px rgba(0, 56, 168, 0.2);
+}
+.badge i { color: var(--ph-gold); }
+
+/* ---------- Gold accent divider ---------- */
+.gold-bar {
+    height: 4px;
+    background: linear-gradient(90deg, var(--ph-blue) 0 33%, var(--ph-gold) 33% 66%, var(--ph-red) 66% 100%);
+    border-radius: 2px;
+    margin-bottom: 2rem;
 }
 
-.badge i {
-    color: #1e6f9f;
-}
-
+/* ---------- Status indicator ---------- */
 .status-indicator {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     padding: 0.3rem 0.8rem;
-    border-radius: 20px;
+    border-radius: 4px;
+    font-weight: 600;
 }
+.status-online { background: #e6f7ec; color: #1a7a3d; border-left: 3px solid #1a7a3d; }
+.status-offline { background: #fdecee; color: var(--ph-red); border-left: 3px solid var(--ph-red); }
+.status-loading { background: #fff8e0; color: var(--ph-gold-dark); border-left: 3px solid var(--ph-gold-dark); }
 
-.status-online { background: #d4edda; color: #155724; }
-.status-offline { background: #f8d7da; color: #721c24; }
-.status-loading { background: #fff3cd; color: #856404; }
-
+/* ---------- Cards ---------- */
 .form-card {
-    background: #ffffff;
-    border-radius: 24px;
+    background: var(--ph-white);
+    border-radius: 8px;
     padding: 2rem 2rem 1.8rem;
-    box-shadow: 0 12px 30px rgba(0, 20, 40, 0.06);
+    box-shadow: 0 6px 20px rgba(0, 56, 168, 0.06);
     margin-bottom: 2.5rem;
-    border: 1px solid #e3eaf2;
+    border: 1px solid var(--ph-border);
+    border-top: 5px solid var(--ph-blue);
 }
 
 .form-card h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #0b2b4b;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--ph-blue-dark);
     margin-bottom: 1.8rem;
     display: flex;
     align-items: center;
@@ -100,13 +171,14 @@ body {
 }
 
 .form-card h2 i {
-    color: #1e6f9f;
-    background: #e6f0fa;
+    color: var(--ph-blue);
+    background: var(--ph-blue-light);
     padding: 0.5rem;
-    border-radius: 12px;
-    font-size: 1.2rem;
+    border-radius: 6px;
+    font-size: 1.1rem;
 }
 
+/* ---------- Form grid ---------- */
 .form-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -121,36 +193,36 @@ body {
 }
 
 .form-group label {
-    font-size: 0.82rem;
-    font-weight: 600;
+    font-size: 0.78rem;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.4px;
-    color: #4b5f7a;
+    letter-spacing: 0.5px;
+    color: var(--ph-blue-dark);
 }
 
 .form-group label i {
     margin-right: 0.3rem;
-    color: #1e6f9f;
-    font-size: 0.8rem;
+    color: var(--ph-blue);
+    font-size: 0.78rem;
 }
 
 .form-group input,
 .form-group select {
     padding: 0.7rem 1rem;
-    border: 1.5px solid #dbe2eb;
-    border-radius: 14px;
+    border: 1.5px solid var(--ph-border);
+    border-radius: 6px;
     font-size: 0.95rem;
-    background: #fafcff;
+    background: #fbfcfe;
     transition: 0.2s;
     outline: none;
-    color: #1e2a41;
+    color: var(--ph-ink);
 }
 
 .form-group input:focus,
 .form-group select:focus {
-    border-color: #1e6f9f;
-    background: #ffffff;
-    box-shadow: 0 0 0 4px rgba(30, 111, 159, 0.08);
+    border-color: var(--ph-blue);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(0, 56, 168, 0.12);
 }
 
 .form-group input::placeholder {
@@ -160,75 +232,79 @@ body {
 
 .section-label {
     grid-column: 1 / -1;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 700;
-    color: #0b2b4b;
+    color: var(--ph-blue-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
     margin-top: 0.3rem;
-    padding-bottom: 0.4rem;
-    border-bottom: 2px dashed #cfdeed;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--ph-gold);
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
-.section-label i {
-    color: #1e6f9f;
-    font-size: 1rem;
-}
+.section-label i { color: var(--ph-blue); font-size: 1rem; }
 
+/* ---------- Buttons ---------- */
 .btn-primary {
-    background: #1e6f9f;
-    color: white;
+    background: var(--ph-blue);
+    color: #fff;
     border: none;
     padding: 0.9rem 2.2rem;
-    border-radius: 40px;
-    font-weight: 600;
-    font-size: 1rem;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.95rem;
     display: inline-flex;
     align-items: center;
     gap: 0.7rem;
     cursor: pointer;
     transition: 0.2s;
-    box-shadow: 0 6px 16px rgba(30, 111, 159, 0.25);
+    box-shadow: 0 4px 12px rgba(0, 56, 168, 0.25);
+    border-bottom: 3px solid var(--ph-gold);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
 }
 
 .btn-primary:hover:not(:disabled) {
-    background: #15587d;
+    background: var(--ph-blue-dark);
     transform: translateY(-1px);
-    box-shadow: 0 10px 20px rgba(30, 111, 159, 0.2);
+    box-shadow: 0 8px 18px rgba(0, 56, 168, 0.28);
 }
 
-.btn-primary:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
 
 .btn-secondary {
-    background: #ffffff;
-    color: #1e6f9f;
-    border: 1.5px solid #cfdeed;
+    background: #fff;
+    color: var(--ph-blue);
+    border: 1.5px solid var(--ph-blue);
     padding: 0.7rem 1.5rem;
-    border-radius: 40px;
+    border-radius: 6px;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
     cursor: pointer;
     transition: 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
 }
 
 .btn-secondary:hover {
-    background: #f4f9ff;
-    border-color: #1e6f9f;
+    background: var(--ph-blue-light);
+    border-color: var(--ph-blue-dark);
 }
 
+/* ---------- Table card ---------- */
 .table-card {
-    background: #ffffff;
-    border-radius: 24px;
+    background: var(--ph-white);
+    border-radius: 8px;
     padding: 1.5rem 1.8rem 1.8rem;
-    box-shadow: 0 12px 30px rgba(0, 20, 40, 0.04);
-    border: 1px solid #e3eaf2;
+    box-shadow: 0 6px 20px rgba(0, 56, 168, 0.05);
+    border: 1px solid var(--ph-border);
+    border-top: 5px solid var(--ph-gold);
     overflow-x: auto;
 }
 
@@ -242,31 +318,30 @@ body {
 }
 
 .table-header h2 {
-    font-size: 1.4rem;
-    font-weight: 600;
-    color: #0b2b4b;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--ph-blue-dark);
     display: flex;
     align-items: center;
     gap: 0.6rem;
 }
 
-.table-header h2 i {
-    color: #1e6f9f;
-}
+.table-header h2 i { color: var(--ph-blue); }
 
 .count-badge {
-    background: #eef3f9;
+    background: var(--ph-blue);
     padding: 0.35rem 1rem;
-    border-radius: 30px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #1e6f9f;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #fff;
+    border-left: 3px solid var(--ph-gold);
 }
 
 .search-box {
     padding: 0.6rem 1rem;
-    border: 1.5px solid #dbe2eb;
-    border-radius: 30px;
+    border: 1.5px solid var(--ph-border);
+    border-radius: 6px;
     font-size: 0.9rem;
     outline: none;
     width: 250px;
@@ -274,10 +349,11 @@ body {
 }
 
 .search-box:focus {
-    border-color: #1e6f9f;
-    box-shadow: 0 0 0 3px rgba(30, 111, 159, 0.1);
+    border-color: var(--ph-blue);
+    box-shadow: 0 0 0 3px rgba(0, 56, 168, 0.12);
 }
 
+/* ---------- Table ---------- */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -289,78 +365,82 @@ table {
 th {
     text-align: left;
     padding: 0.9rem 0.8rem;
-    background: #f0f6fd;
-    color: #0b2b4b;
+    background: var(--ph-blue-dark);
+    color: #fff;
     font-weight: 600;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     text-transform: uppercase;
-    letter-spacing: 0.3px;
-    border-bottom: 2px solid #d0e0f0;
+    letter-spacing: 0.4px;
+    border-bottom: 3px solid var(--ph-gold);
 }
 
 td {
     padding: 0.85rem 0.8rem;
-    border-bottom: 1px solid #e9eff6;
-    color: #1e2a41;
+    border-bottom: 1px solid #eef1f6;
+    color: var(--ph-ink);
     vertical-align: middle;
 }
 
+tr:nth-child(even) td { background: #fafbfe; }
+tr:hover td { background: var(--ph-blue-light); }
 tr:last-child td { border-bottom: none; }
-tr:hover td { background: #f9fcff; }
 
 .empty-row td {
     text-align: center;
     padding: 2.5rem 1rem;
-    color: #8a9bb2;
+    color: var(--ph-muted);
     font-style: italic;
     font-size: 0.95rem;
-    background: #fbfdff;
+    background: #fbfcfe;
 }
 
+/* ---------- Delete button ---------- */
 .btn-delete {
     background: transparent;
-    border: 1px solid #f0cdcd;
-    color: #c24a4a;
+    border: 1.5px solid var(--ph-red);
+    color: var(--ph-red);
     padding: 0.4rem 0.8rem;
-    border-radius: 20px;
+    border-radius: 4px;
     font-size: 0.7rem;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     transition: 0.15s;
     display: inline-flex;
     align-items: center;
     gap: 0.3rem;
+    text-transform: uppercase;
 }
 
 .btn-delete:hover:not(:disabled) {
-    background: #fef2f2;
-    border-color: #d99b9b;
+    background: var(--ph-red);
+    color: #fff;
 }
 
-.btn-delete:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
+.btn-delete:disabled { opacity: 0.5; cursor: not-allowed; }
 
+/* ---------- Notes ---------- */
 .small-note {
     margin-top: 1rem;
     font-size: 0.75rem;
-    color: #8a9bb2;
+    color: var(--ph-muted);
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    padding-top: 0.8rem;
+    border-top: 1px dashed var(--ph-border);
 }
 
-.small-note i { color: #1e6f9f; }
+.small-note i { color: var(--ph-blue); }
 
+/* ---------- Toast ---------- */
 .toast {
     position: fixed;
     top: 20px;
     right: 20px;
     padding: 1rem 1.5rem;
-    border-radius: 12px;
-    color: white;
-    font-weight: 500;
+    border-radius: 6px;
+    color: #fff;
+    font-weight: 600;
     font-size: 0.9rem;
     z-index: 9999;
     box-shadow: 0 8px 20px rgba(0,0,0,0.15);
@@ -370,17 +450,19 @@ tr:hover td { background: #f9fcff; }
     transform: translateX(150%);
     transition: transform 0.3s ease;
     max-width: 400px;
+    border-left: 5px solid var(--ph-gold);
 }
 
 .toast.show { transform: translateX(0); }
-.toast.success { background: #28a745; }
-.toast.error { background: #dc3545; }
-.toast.info { background: #1e6f9f; }
+.toast.success { background: #1a7a3d; }
+.toast.error { background: var(--ph-red); }
+.toast.info { background: var(--ph-blue); }
 
+/* ---------- Loading overlay ---------- */
 .loading-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(255,255,255,0.7);
+    background: rgba(255,255,255,0.75);
     display: none;
     align-items: center;
     justify-content: center;
@@ -390,8 +472,8 @@ tr:hover td { background: #f9fcff; }
 .loading-overlay.active { display: flex; }
 
 .spinner {
-    border: 4px solid #e3eaf2;
-    border-top: 4px solid #1e6f9f;
+    border: 4px solid var(--ph-blue-light);
+    border-top: 4px solid var(--ph-blue);
     border-radius: 50%;
     width: 50px;
     height: 50px;
@@ -403,9 +485,13 @@ tr:hover td { background: #f9fcff; }
     100% { transform: rotate(360deg); }
 }
 
+/* ---------- Responsive ---------- */
 @media (max-width: 700px) {
-    body { padding: 1rem; }
+    body { padding: 0 1rem 1rem; }
+    .gov-topbar { margin: 0 -1rem 1.5rem; }
     .form-card { padding: 1.5rem; }
     .header { flex-direction: column; align-items: flex-start; }
     .search-box { width: 100%; }
+    .logo-text h1 { font-size: 1.5rem; }
+    .gov-logo, .gov-logo-fallback { width: 56px; height: 56px; }
 }
