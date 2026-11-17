@@ -8,20 +8,40 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<!-- Philippine Government top strip -->
+<div class="gov-topbar">
+    <div class="gov-topbar-inner">
+        <span><i class="fas fa-flag"></i> Republic of the Philippines</span>
+        <span class="gov-topbar-right">Department of Human Settlements and Urban Development · Region VI</span>
+    </div>
+</div>
+
 <div class="container">
     <div class="header">
         <div class="logo-area">
-            <h1><i class="fas fa-building"></i> DHSUD Region VI</h1>
-            <p>Human Resource Management · Employee Records
-                <span id="statusIndicator" class="status-indicator status-loading">
-                    <i class="fas fa-circle-notch fa-spin"></i> Connecting...
-                </span>
-            </p>
+            <img
+                src="https://raw.githubusercontent.com/USER/REPO/main/DHSUD_LOGO.png"
+                alt="DHSUD Logo"
+                class="gov-logo"
+                onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='inline-flex';">
+            <span id="logoFallback" class="gov-logo-fallback" style="display:none;">
+                <i class="fas fa-building"></i>
+            </span>
+            <div class="logo-text">
+                <h1>DHSUD Region VI</h1>
+                <p>Human Resource Management · Employee Records
+                    <span id="statusIndicator" class="status-indicator status-loading">
+                        <i class="fas fa-circle-notch fa-spin"></i> Connecting...
+                    </span>
+                </p>
+            </div>
         </div>
         <div class="badge">
             <i class="fas fa-users"></i> <span id="employeeCount">0</span> employees
         </div>
     </div>
+
+    <div class="gold-bar"></div>
 
     <div class="form-card">
         <h2><i class="fas fa-user-plus"></i> Add New Employee</h2>
