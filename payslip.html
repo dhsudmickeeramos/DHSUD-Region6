@@ -7,134 +7,25 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* =====================================================
-           PAYSLIP SPECIFIC STYLES
-           ===================================================== */
-        body {
-            background: #e9ecef;
-            padding: 2rem 1.5rem;
-        }
-
-        .payslip-layout {
-            display: flex;
-            gap: 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            align-items: flex-start;
-        }
-
-        /* Form Sidebar */
-        .payslip-form-sidebar {
-            width: 400px;
-            background: #fff;
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            flex-shrink: 0;
-        }
-        .payslip-form-sidebar h3 {
-            margin-bottom: 1rem;
-            color: var(--ph-blue-dark);
-            border-bottom: 2px solid var(--ph-gold);
-            padding-bottom: 0.5rem;
-        }
-
-        /* The Actual Document */
-        .document-wrapper {
-            flex-grow: 1;
-            display: flex;
-            justify-content: center;
-            overflow-x: auto;
-        }
-
-        .payslip-document {
-            background: #fff;
-            width: 210mm;
-            min-height: 297mm;
-            padding: 20mm;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-            position: relative;
-            font-family: 'Arial', sans-serif;
-            color: #000;
-            font-size: 11px;
-        }
-
-        /* Document Header */
-        .doc-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .doc-header-center {
-            text-align: center;
-            flex-grow: 1;
-        }
-        .doc-header-center h4 {
-            font-size: 10px;
-            letter-spacing: 1px;
-            color: #555;
-            margin-bottom: 2px;
-        }
-        .doc-header-center h2 {
-            font-size: 13px;
-            font-weight: bold;
-            color: var(--ph-blue);
-            margin-bottom: 2px;
-        }
-        .doc-header-center h3 {
-            font-size: 12px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        .doc-header-center h1 {
-            font-size: 14px;
-            font-weight: bold;
-            margin-top: 15px;
-        }
-        .doc-logo {
-            width: 70px;
-            height: auto;
-        }
-
-        /* Document Divider */
-        .doc-divider {
-            border-top: 2px dashed #000;
-            margin: 15px 0;
-            position: relative;
-            text-align: center;
-        }
-        .doc-divider span {
-            background: #fff;
-            padding: 0 10px;
-            font-weight: bold;
-            font-size: 11px;
-            position: relative;
-            top: -8px;
-        }
-
-        /* Info Section */
-        .doc-info-grid {
-            display: grid;
-            grid-template-columns: 120px 10px 1fr;
-            gap: 5px;
-            margin-bottom: 20px;
-            font-weight: bold;
-            font-size: 11px;
-        }
+        body { background: #e9ecef; padding: 2rem 1.5rem; }
+        .payslip-layout { display: flex; gap: 2rem; max-width: 1400px; margin: 0 auto; align-items: flex-start; }
+        .payslip-form-sidebar { width: 400px; background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); flex-shrink: 0; }
+        .payslip-form-sidebar h3 { margin-bottom: 1rem; color: var(--ph-blue-dark); border-bottom: 2px solid var(--ph-gold); padding-bottom: 0.5rem; }
+        .document-wrapper { flex-grow: 1; display: flex; justify-content: center; overflow-x: auto; }
+        .payslip-document { background: #fff; width: 210mm; min-height: 297mm; padding: 20mm; box-shadow: 0 0 20px rgba(0,0,0,0.1); position: relative; font-family: 'Arial', sans-serif; color: #000; font-size: 11px; }
+        .doc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .doc-header-center { text-align: center; flex-grow: 1; }
+        .doc-header-center h4 { font-size: 10px; letter-spacing: 1px; color: #555; margin-bottom: 2px; }
+        .doc-header-center h2 { font-size: 13px; font-weight: bold; color: var(--ph-blue); margin-bottom: 2px; }
+        .doc-header-center h3 { font-size: 12px; font-weight: bold; margin-bottom: 10px; }
+        .doc-header-center h1 { font-size: 14px; font-weight: bold; margin-top: 15px; }
+        .doc-logo { width: 70px; height: auto; }
+        .doc-divider { border-top: 2px dashed #000; margin: 15px 0; position: relative; text-align: center; }
+        .doc-divider span { background: #fff; padding: 0 10px; font-weight: bold; font-size: 11px; position: relative; top: -8px; }
+        .doc-info-grid { display: grid; grid-template-columns: 120px 10px 1fr; gap: 5px; margin-bottom: 20px; font-weight: bold; font-size: 11px; }
         .doc-info-grid div:nth-child(3n) { font-weight: normal; }
-
-        /* Table Section */
-        .doc-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 11px;
-            margin-bottom: 15px;
-        }
-        .doc-table td {
-            padding: 3px 0;
-            border: none;
-        }
+        .doc-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 15px; }
+        .doc-table td { padding: 3px 0; border: none; }
         .doc-table .label { font-weight: bold; width: 150px; }
         .doc-table .desc { width: 250px; }
         .doc-table .amount { text-align: right; width: 100px; }
@@ -142,353 +33,142 @@
         .doc-table .bold { font-weight: bold; }
         .doc-table .line-item { padding-left: 15px; font-size: 10px; }
         .doc-table .sub-line { padding-left: 15px; font-size: 10px; }
-
-        /* Totals Section */
-        .doc-totals {
-            margin-top: 10px;
-            margin-left: auto;
-            width: 50%;
-            font-size: 11px;
-        }
-        .doc-totals .row {
-            display: flex;
-            justify-content: space-between;
-            padding: 4px 0;
-            font-weight: bold;
-        }
+        .doc-totals { margin-top: 10px; margin-left: auto; width: 50%; font-size: 11px; }
+        .doc-totals .row { display: flex; justify-content: space-between; padding: 4px 0; font-weight: bold; }
         .doc-totals .row .val { text-align: right; width: 120px; }
         .doc-totals .row.net-pay { margin-top: 10px; font-size: 12px; }
         .doc-totals .row.net-pay .val { border-bottom: 1.5px solid #000; }
-        
-        /* Signature */
-        .doc-signature {
-            margin-top: 50px;
-            font-size: 11px;
-            width: 300px;
-        }
-        .doc-signature .name {
-            font-weight: bold;
-            margin-top: 25px;
-            border-bottom: 1px solid #000;
-            display: inline-block;
-            width: 250px;
-            text-align: center;
-        }
+        .doc-signature { margin-top: 50px; font-size: 11px; width: 300px; }
+        .doc-signature .name { font-weight: bold; margin-top: 25px; border-bottom: 1px solid #000; display: inline-block; width: 250px; text-align: center; }
         .doc-signature .title { text-align: center; width: 250px; }
-
-        /* Footer */
-        .doc-footer {
-            position: absolute;
-            bottom: 20mm;
-            left: 20mm;
-            right: 20mm;
-            text-align: center;
-            font-size: 8px;
-            border-top: 1px solid #ccc;
-            padding-top: 10px;
-        }
-        .doc-footer .footer-logos {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 5px;
-        }
-        .doc-footer .footer-logos img {
-            height: 30px;
-        }
-        .doc-footer .footer-text {
-            line-height: 1.4;
-            color: #333;
-        }
-
-        /* Print Overrides */
+        .doc-footer { position: absolute; bottom: 20mm; left: 20mm; right: 20mm; text-align: center; font-size: 8px; border-top: 1px solid #ccc; padding-top: 10px; }
+        .doc-footer .footer-logos { display: flex; justify-content: center; gap: 20px; margin-bottom: 5px; }
+        .doc-footer .footer-logos img { height: 30px; }
+        .doc-footer .footer-text { line-height: 1.4; color: #333; }
         @media print {
-            body {
-                background: #fff;
-                padding: 0;
-                margin: 0;
-            }
-            .payslip-form-sidebar {
-                display: none !important;
-            }
-            .document-wrapper {
-                display: block;
-            }
-            .payslip-document {
-                box-shadow: none;
-                margin: 0;
-                width: 100%;
-                padding: 0;
-            }
-            @page {
-                size: A4;
-                margin: 15mm;
-            }
+            body { background: #fff; padding: 0; margin: 0; }
+            .payslip-form-sidebar { display: none !important; }
+            .document-wrapper { display: block; }
+            .payslip-document { box-shadow: none; margin: 0; width: 100%; padding: 0; }
+            @page { size: A4; margin: 15mm; }
+            .nav-menu { display: none !important; }
+            .gov-topbar, .gold-bar { display: none !important; }
         }
     </style>
 </head>
 <body>
 
-<div class="payslip-layout">
+<div class="container">
+    <div class="header" style="margin-bottom: 2rem;">
+        <div class="logo-area">
+            <img src="https://raw.githubusercontent.com/dhsudmickeeramos/DHSUD-Region6/main/DHSUD_LOGO.png" alt="DHSUD Logo" class="gov-logo">
+            <div class="logo-text">
+                <h1>DHSUD Region VI</h1>
+                <p>Human Resource Management · Employee Records</p>
+            </div>
+        </div>
+        <div class="nav-menu">
+            <a href="index.html" class="btn-secondary"><i class="fas fa-list-ul"></i> Employee List</a>
+            <a href="add_employee.html" class="btn-secondary"><i class="fas fa-user-plus"></i> Add Employee</a>
+            <a href="payslip.html" class="btn-secondary active-nav"><i class="fas fa-file-invoice-dollar"></i> Generate Payslip</a>
+        </div>
+    </div>
     
-    <!-- SIDEBAR FORM -->
+    <div class="gold-bar"></div>
+</div>
+
+<div class="payslip-layout">
     <div class="payslip-form-sidebar">
         <h3><i class="fas fa-edit"></i> Edit Payslip Data</h3>
-        <div class="form-group">
-            <label>Month & Year</label>
-            <input type="text" id="inputMonth" value="FOR THE MONTH OF AUGUST 2026" oninput="updateDoc()">
-        </div>
-        <div class="form-group">
-            <label>Name</label>
-            <input type="text" id="inputName" value="RAMOS, MICKEE C." oninput="updateDoc()">
-        </div>
-        <div class="form-group">
-            <label>Position</label>
-            <input type="text" id="inputPosition" value="AO III" oninput="updateDoc()">
-        </div>
-        <div class="form-group">
-            <label>Employee No.</label>
-            <input type="text" id="inputEmpNo" value="R006-037" oninput="updateDoc()">
-        </div>
-        
+        <div class="form-group"><label>Month & Year</label><input type="text" id="inputMonth" value="FOR THE MONTH OF AUGUST 2026" oninput="updateDoc()"></div>
+        <div class="form-group"><label>Name</label><input type="text" id="inputName" value="RAMOS, MICKEE C." oninput="updateDoc()"></div>
+        <div class="form-group"><label>Position</label><input type="text" id="inputPosition" value="AO III" oninput="updateDoc()"></div>
+        <div class="form-group"><label>Employee No.</label><input type="text" id="inputEmpNo" value="R006-037" oninput="updateDoc()"></div>
         <hr style="margin: 15px 0; border-top: 1px dashed #ccc;">
-
-        <div class="form-group">
-            <label>Salaries and Wages-Regular</label>
-            <input type="number" step="0.01" id="inputSalWages" value="38764.00" oninput="updateDoc()">
-        </div>
-        <div class="form-group">
-            <label>PERA</label>
-            <input type="number" step="0.01" id="inputPera" value="2000.00" oninput="updateDoc()">
-        </div>
-        
+        <div class="form-group"><label>Salaries and Wages-Regular</label><input type="number" step="0.01" id="inputSalWages" value="38764.00" oninput="updateDoc()"></div>
+        <div class="form-group"><label>PERA</label><input type="number" step="0.01" id="inputPera" value="2000.00" oninput="updateDoc()"></div>
         <hr style="margin: 15px 0; border-top: 1px dashed #ccc;">
-
-        <div class="form-group">
-            <label>Income Tax Withheld</label>
-            <input type="number" step="0.01" id="inputTax" value="2100.00" oninput="updateDoc()">
-        </div>
-        <div class="form-group">
-            <label>GSIS PS CONT. (L & R)</label>
-            <input type="number" step="0.01" id="inputGsis" value="3488.76" oninput="updateDoc()">
-        </div>
-        <div class="form-group">
-            <label>HDMF PS CONT.</label>
-            <input type="number" step="0.01" id="inputHdmf" value="200.00" oninput="updateDoc()">
-        </div>
-        <div class="form-group">
-            <label>PHIC</label>
-            <input type="number" step="0.01" id="inputPhic" value="969.10" oninput="updateDoc()">
-        </div>
-        <div class="form-group">
-            <label>DHSudEa</label>
-            <input type="number" step="0.01" id="inputDhsu" value="50.00" oninput="updateDoc()">
-        </div>
-
-        <button class="btn-primary" onclick="window.print()" style="width: 100%; margin-top: 20px;">
-            <i class="fas fa-print"></i> Print Payslip
-        </button>
-        <a href="index_.html" class="btn-secondary" style="width: 100%; margin-top: 10px; text-align: center; justify-content: center;">
-            <i class="fas fa-arrow-left"></i> Back to Records
-        </a>
+        <div class="form-group"><label>Income Tax Withheld</label><input type="number" step="0.01" id="inputTax" value="2100.00" oninput="updateDoc()"></div>
+        <div class="form-group"><label>GSIS PS CONT. (L & R)</label><input type="number" step="0.01" id="inputGsis" value="3488.76" oninput="updateDoc()"></div>
+        <div class="form-group"><label>HDMF PS CONT.</label><input type="number" step="0.01" id="inputHdmf" value="200.00" oninput="updateDoc()"></div>
+        <div class="form-group"><label>PHIC</label><input type="number" step="0.01" id="inputPhic" value="969.10" oninput="updateDoc()"></div>
+        <div class="form-group"><label>DHSudEa</label><input type="number" step="0.01" id="inputDhsu" value="50.00" oninput="updateDoc()"></div>
+        <button class="btn-primary" onclick="window.print()" style="width: 100%; margin-top: 20px;"><i class="fas fa-print"></i> Print Payslip</button>
     </div>
 
-    <!-- PRINTABLE DOCUMENT -->
     <div class="document-wrapper">
         <div class="payslip-document">
-            
-            <!-- Header -->
             <div class="doc-header">
                 <img src="https://raw.githubusercontent.com/dhsudmickeeramos/DHSUD-Region6/main/DHSUD_LOGO.png" alt="DHSUD Logo" class="doc-logo">
-                
                 <div class="doc-header-center">
                     <h4>REPUBLIC OF THE PHILIPPINES</h4>
                     <h2>Department of Human Settlements and Urban Development</h2>
                     <h3>Kalayaan sa Pagpapatayo ng Pabahay at Paninirahan ng Kinabukasan</h3>
                     <h1>OFFICIAL PAYSLIP</h1>
                 </div>
-                
-                <!-- Placeholder for the right-side logos (O and PAB) -->
                 <div style="width: 70px; display: flex; flex-direction: column; gap: 5px; align-items: flex-end;">
                     <div style="border: 1px solid #000; padding: 2px 5px; font-size: 8px; font-weight: bold;">O</div>
                     <div style="border: 1px solid #000; padding: 2px 5px; font-size: 8px; font-weight: bold;">PAB</div>
                 </div>
             </div>
-
-            <div class="doc-divider">
-                <span id="docMonth">FOR THE MONTH OF AUGUST 2026</span>
-            </div>
-
-            <!-- Info -->
+            <div class="doc-divider"><span id="docMonth">FOR THE MONTH OF AUGUST 2026</span></div>
             <div class="doc-info-grid">
                 <div>Name:</div> <div>:</div> <div id="docName">RAMOS, MICKEE C.</div>
                 <div>Position:</div> <div>:</div> <div id="docPosition">AO III</div>
                 <div>Employee No.:</div> <div>:</div> <div id="docEmpNo">R006-037</div>
             </div>
-
-            <!-- Financials -->
             <table class="doc-table">
-                <tr>
-                    <td class="label">COMPENSATION:</td>
-                    <td class="desc">Salaries and Wages-Regular</td>
-                    <td class="amount" id="docSalWages">38,764.00</td>
-                </tr>
-                <tr>
-                    <td class="label"></td>
-                    <td class="desc">PERA</td>
-                    <td class="amount" id="docPera">2,000.00</td>
-                </tr>
-                <tr>
-                    <td class="label"></td>
-                    <td class="desc bold">Gross Amount Earned</td>
-                    <td class="amount bold underline" id="docGross">40,764.00</td>
-                </tr>
+                <tr><td class="label">COMPENSATION:</td><td class="desc">Salaries and Wages-Regular</td><td class="amount" id="docSalWages">38,764.00</td></tr>
+                <tr><td class="label"></td><td class="desc">PERA</td><td class="amount" id="docPera">2,000.00</td></tr>
+                <tr><td class="label"></td><td class="desc bold">Gross Amount Earned</td><td class="amount bold underline" id="docGross">40,764.00</td></tr>
                 <tr><td colspan="3" style="height: 15px;"></td></tr>
-                <tr>
-                    <td class="label">Less: Deductions:</td>
-                    <td class="desc">INCOME TAX W/HELD</td>
-                    <td class="amount" id="docTax">2,100.00</td>
-                </tr>
-                <tr>
-                    <td class="label"></td>
-                    <td class="desc">GSIS &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PS CONT. (L & R)</td>
-                    <td class="amount" id="docGsis">3,488.76</td>
-                </tr>
-                <tr>
-                    <td class="label"></td>
-                    <td class="desc line-item">CONSO LOAN</td>
-                    <td class="amount">-</td>
-                </tr>
-                <tr>
-                    <td class="label"></td>
-                    <td class="desc line-item">MPL LOAN</td>
-                    <td class="amount">-</td>
-                </tr>
-                <tr>
-                    <td class="label"></td>
-                    <td class="desc line-item">POLICY LOAN</td>
-                    <td class="amount">-</td>
-                </tr>
-                <tr>
-                    <td class="label"></td>
-                    <td class="desc line-item">EDUCATIONAL LOAN</td>
-                    <td class="amount">-</td>
-                </tr>
-                <tr>
-                    <td class="label"></td>
-                    <td class="desc line-item">EMERGENCY LOAN</td>
-                    <td class="amount">-</td>
-                </tr>
-                <tr>
-                    <td class="label"></td>
-                    <td class="desc line-item">MPL LITE</td>
-                    <td class="amount">-</td>
-                </tr>
-                <tr>
-                    <td class="label"></td>
-                    <td class="desc line-item">COMPUTER LOAN PROGRAM</td>
-                    <td class="amount">-</td>
-                </tr>
-                <tr>
-                    <td class="label"></td>
-                    <td class="desc">HDMF &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PS CONT.</td>
-                    <td class="amount" id="docHdmf">200.00</td>
-                </tr>
-                <tr>
-                    <td class="label"></td>
-                    <td class="desc line-item">P II CONT.</td>
-                    <td class="amount">-</td>
-                </tr>
-                <tr>
-                    <td class="label"></td>
-                    <td class="desc line-item">MPL LOAN</td>
-                    <td class="amount">-</td>
-                </tr>
-                <tr>
-                    <td class="label"></td>
-                    <td class="desc line-item">CALAMITY LOAN</td>
-                    <td class="amount">-</td>
-                </tr>
-                <tr>
-                    <td class="label"></td>
-                    <td class="desc">PHIC</td>
-                    <td class="amount" id="docPhic">969.10</td>
-                </tr>
-                <tr>
-                    <td class="label"></td>
-                    <td class="desc">HLURB COOP.</td>
-                    <td class="amount">-</td>
-                </tr>
-                <tr>
-                    <td class="label"></td>
-                    <td class="desc">DHSUDEA</td>
-                    <td class="amount" id="docDhsu">50.00</td>
-                </tr>
-                <tr>
-                    <td class="label"></td>
-                    <td class="desc bold">Total Deductions</td>
-                    <td class="amount bold underline" id="docTotalDeductions">6,807.86</td>
-                </tr>
+                <tr><td class="label">Less: Deductions:</td><td class="desc">INCOME TAX W/HELD</td><td class="amount" id="docTax">2,100.00</td></tr>
+                <tr><td class="label"></td><td class="desc">GSIS &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PS CONT. (L & R)</td><td class="amount" id="docGsis">3,488.76</td></tr>
+                <tr><td class="label"></td><td class="desc line-item">CONSO LOAN</td><td class="amount">-</td></tr>
+                <tr><td class="label"></td><td class="desc line-item">MPL LOAN</td><td class="amount">-</td></tr>
+                <tr><td class="label"></td><td class="desc line-item">POLICY LOAN</td><td class="amount">-</td></tr>
+                <tr><td class="label"></td><td class="desc line-item">EDUCATIONAL LOAN</td><td class="amount">-</td></tr>
+                <tr><td class="label"></td><td class="desc line-item">EMERGENCY LOAN</td><td class="amount">-</td></tr>
+                <tr><td class="label"></td><td class="desc line-item">MPL LITE</td><td class="amount">-</td></tr>
+                <tr><td class="label"></td><td class="desc line-item">COMPUTER LOAN PROGRAM</td><td class="amount">-</td></tr>
+                <tr><td class="label"></td><td class="desc">HDMF &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PS CONT.</td><td class="amount" id="docHdmf">200.00</td></tr>
+                <tr><td class="label"></td><td class="desc line-item">P II CONT.</td><td class="amount">-</td></tr>
+                <tr><td class="label"></td><td class="desc line-item">MPL LOAN</td><td class="amount">-</td></tr>
+                <tr><td class="label"></td><td class="desc line-item">CALAMITY LOAN</td><td class="amount">-</td></tr>
+                <tr><td class="label"></td><td class="desc">PHIC</td><td class="amount" id="docPhic">969.10</td></tr>
+                <tr><td class="label"></td><td class="desc">HLURB COOP.</td><td class="amount">-</td></tr>
+                <tr><td class="label"></td><td class="desc">DHSUDEA</td><td class="amount" id="docDhsu">50.00</td></tr>
+                <tr><td class="label"></td><td class="desc bold">Total Deductions</td><td class="amount bold underline" id="docTotalDeductions">6,807.86</td></tr>
             </table>
-
-            <!-- Totals -->
             <div class="doc-totals">
-                <div class="row net-pay">
-                    <span>Net Pay:</span>
-                    <span class="val" id="docNetPay">33,956.14</span>
-                </div>
-                <div class="row" style="margin-top: 10px;">
-                    <span>1st Quincena</span>
-                    <span class="val underline" id="docQ1">16,978.07</span>
-                </div>
-                <div class="row">
-                    <span>2nd Quincena</span>
-                    <span class="val underline" id="docQ2">16,978.07</span>
-                </div>
+                <div class="row net-pay"><span>Net Pay:</span><span class="val" id="docNetPay">33,956.14</span></div>
+                <div class="row" style="margin-top: 10px;"><span>1st Quincena</span><span class="val underline" id="docQ1">16,978.07</span></div>
+                <div class="row"><span>2nd Quincena</span><span class="val underline" id="docQ2">16,978.07</span></div>
             </div>
-
-            <!-- Signature -->
             <div class="doc-signature">
                 <div>Prepared by:</div>
-                <div style="font-family: 'Brush Script MT', cursive, sans-serif; font-size: 24px; margin-top: 10px; margin-bottom: -15px; margin-left: 20px;">
-                    Ma. Geraldine R. Tardaguila
-                </div>
+                <div style="font-family: 'Brush Script MT', cursive, sans-serif; font-size: 24px; margin-top: 10px; margin-bottom: -15px; margin-left: 20px;">Ma. Geraldine R. Tardaguila</div>
                 <div class="name">MA. GERALDINE R. TARDAGUILA</div>
                 <div class="title">Supervising Administrative Officer</div>
             </div>
-
-            <!-- Footer -->
             <div class="doc-footer">
                 <div class="footer-logos">
                     <div style="border: 1px solid #ccc; padding: 2px 8px; border-radius: 4px; font-size: 7px; font-weight: bold;">ISO CERTIFIED</div>
                     <div style="border: 1px solid #ccc; padding: 2px 8px; border-radius: 4px; font-size: 7px; font-weight: bold;">BAGONG PILIPINAS</div>
                 </div>
-                <div class="footer-text">
-                    DHSUD Regional Office VI<br>
-                    3F Granadas Condominium, Iznart St., Iloilo City<br>
-                    Tel. No.: (033) 321-4177 / (033) 335-0762 | Local Number: 0901-6300 | Email: region6@dhsud.gov.ph | Facebook: @DHSUDRegion6
-                </div>
+                <div class="footer-text">DHSUD Regional Office VI<br>3F Granadas Condominium, Iznart St., Iloilo City<br>Tel. No.: (033) 321-4177 / (033) 335-0762 | Local Number: 0901-6300 | Email: region6@dhsud.gov.ph | Facebook: @DHSUDRegion6</div>
             </div>
-
         </div>
     </div>
 </div>
 
 <script>
-    // Function to format numbers with commas and 2 decimals
-    function formatCurrency(num) {
-        return parseFloat(num || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    }
-
-    // Main function to update the document text based on form inputs
+    function formatCurrency(num) { return parseFloat(num || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
     function updateDoc() {
-        // Text Fields
         document.getElementById('docMonth').textContent = document.getElementById('inputMonth').value;
         document.getElementById('docName').textContent = document.getElementById('inputName').value;
         document.getElementById('docPosition').textContent = document.getElementById('inputPosition').value;
         document.getElementById('docEmpNo').textContent = document.getElementById('inputEmpNo').value;
-
-        // Financial Values
         const salWages = parseFloat(document.getElementById('inputSalWages').value) || 0;
         const pera = parseFloat(document.getElementById('inputPera').value) || 0;
         const tax = parseFloat(document.getElementById('inputTax').value) || 0;
@@ -496,34 +176,13 @@
         const hdmf = parseFloat(document.getElementById('inputHdmf').value) || 0;
         const phic = parseFloat(document.getElementById('inputPhic').value) || 0;
         const dhsu = parseFloat(document.getElementById('inputDhsu').value) || 0;
-
-        // Calculations
         const gross = salWages + pera;
         const totalDeductions = tax + gsis + hdmf + phic + dhsu;
         const netPay = gross - totalDeductions;
         const half = netPay / 2;
-
-        // Update DOM
         document.getElementById('docSalWages').textContent = formatCurrency(salWages);
         document.getElementById('docPera').textContent = formatCurrency(pera);
         document.getElementById('docGross').textContent = formatCurrency(gross);
-        
         document.getElementById('docTax').textContent = formatCurrency(tax);
         document.getElementById('docGsis').textContent = formatCurrency(gsis);
-        document.getElementById('docHdmf').textContent = formatCurrency(hdmf);
-        document.getElementById('docPhic').textContent = formatCurrency(phic);
-        document.getElementById('docDhsu').textContent = formatCurrency(dhsu);
-        
-        document.getElementById('docTotalDeductions').textContent = formatCurrency(totalDeductions);
-        
-        document.getElementById('docNetPay').textContent = formatCurrency(netPay);
-        document.getElementById('docQ1').textContent = formatCurrency(half);
-        document.getElementById('docQ2').textContent = formatCurrency(half);
-    }
-
-    // Initialize on load
-    document.addEventListener('DOMContentLoaded', updateDoc);
-</script>
-
-</body>
-</html>
+        document.getElementById('docHdm
