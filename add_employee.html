@@ -53,7 +53,7 @@
                 <div class="form-group"><label><i class="fas fa-user-friends"></i> Emergency Contact Person</label><input type="text" id="emergencyPerson" placeholder="Full name" required></div>
                 <div class="form-group"><label><i class="fas fa-phone-square-alt"></i> Emergency Contact No.</label><input type="tel" id="emergencyNo" placeholder="e.g. 0918 987 6543" required></div>
 
-                <div class="section-label"><i class="fas fa-briefcase"></i> Employment Information</div>
+                <div class="section-label"><i class="fas fa-briefcase"></i> Employment & Professional Info</div>
                 <div class="form-group"><label><i class="fas fa-user-tie"></i> Position</label><input type="text" id="position" placeholder="e.g. Administrative Officer" required></div>
                 <div class="form-group"><label><i class="fas fa-layer-group"></i> Salary Grade</label><input type="text" id="salaryGrade" placeholder="e.g. SG-11" required></div>
                 <div class="form-group"><label><i class="fas fa-money-bill-wave"></i> Salary</label><input type="number" id="salary" step="0.01" placeholder="e.g. 25000.00" required></div>
@@ -65,89 +65,10 @@
                     </select>
                 </div>
                 <div class="form-group"><label><i class="fas fa-calendar-alt"></i> Start Date</label><input type="date" id="startDate" required></div>
+                
+                <!-- New Fields -->
+                <div class="form-group"><label><i class="fas fa-graduation-cap"></i> Profession</label><input type="text" id="profession" placeholder="e.g. Civil Engineer"></div>
+                <div class="form-group"><label><i class="fas fa-id-badge"></i> PRC No.</label><input type="text" id="prcNo" placeholder="e.g. 0012345"></div>
 
                 <div class="section-label"><i class="fas fa-id-card-alt"></i> Government Numbers</div>
-                <div class="form-group"><label><i class="fas fa-key"></i> GSIS No.</label><input type="text" id="gsisNo" placeholder="e.g. 1234-5678-90" required></div>
-                <div class="form-group"><label><i class="fas fa-shield-alt"></i> SSS No.</label><input type="text" id="sssNo" placeholder="e.g. 34-1234567-8" required></div>
-                <div class="form-group"><label><i class="fas fa-file-invoice"></i> TIN No.</label><input type="text" id="tinNo" placeholder="e.g. 123-456-789-000" required></div>
-                <div class="form-group"><label><i class="fas fa-piggy-bank"></i> Pag-IBIG No.</label><input type="text" id="pagibigNo" placeholder="e.g. 1234-5678-9012" required></div>
-                <div class="form-group"><label><i class="fas fa-heartbeat"></i> PhilHealth Number</label><input type="text" id="philhealthNo" placeholder="e.g. 12-345678901-2" required></div>
-            </div>
-
-            <button type="submit" class="btn-primary" id="submitBtn">
-                <i class="fas fa-save"></i> Save Employee
-            </button>
-        </form>
-    </div>
-</div>
-
-<div id="toast" class="toast"></div>
-<div id="loadingOverlay" class="loading-overlay"><div class="spinner"></div></div>
-
-<script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbyXu6iWw1Bp4TqR9toiWbCjGRhwKAkMrzSqBB0x6diHP36lz4Imk0LLRx77nbWstIZ6jw/exec';
-    const form = document.getElementById('employeeForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const toastEl = document.getElementById('toast');
-    const loadingOverlay = document.getElementById('loadingOverlay');
-
-    function showToast(message, type = 'info') {
-        toastEl.className = `toast ${type}`;
-        const icon = type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle';
-        toastEl.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
-        toastEl.classList.add('show');
-        setTimeout(() => toastEl.classList.remove('show'), 3500);
-    }
-
-    function setLoading(active) { loadingOverlay.classList.toggle('active', active); }
-
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const payload = {
-            fullName: document.getElementById('fullName').value.trim(),
-            address: document.getElementById('address').value.trim(),
-            birthday: document.getElementById('birthday').value,
-            bloodType: document.getElementById('bloodType').value,
-            contactNo: document.getElementById('contactNo').value.trim(),
-            emergencyPerson: document.getElementById('emergencyPerson').value.trim(),
-            emergencyNo: document.getElementById('emergencyNo').value.trim(),
-            position: document.getElementById('position').value.trim(),
-            salaryGrade: document.getElementById('salaryGrade').value.trim(),
-            salary: document.getElementById('salary').value,
-            division: document.getElementById('division').value.trim(),
-            employmentStatus: document.getElementById('employmentStatus').value,
-            startDate: document.getElementById('startDate').value,
-            gsisNo: document.getElementById('gsisNo').value.trim(),
-            sssNo: document.getElementById('sssNo').value.trim(),
-            tinNo: document.getElementById('tinNo').value.trim(),
-            pagibigNo: document.getElementById('pagibigNo').value.trim(),
-            philhealthNo: document.getElementById('philhealthNo').value.trim()
-        };
-
-        submitBtn.disabled = true;
-        setLoading(true);
-        try {
-            const body = new URLSearchParams({ action: 'add', ...payload });
-            const res = await fetch(API_URL, {
-                method: 'POST',
-                body,
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-            });
-            const json = await res.json();
-            
-            if (json.success) {
-                showToast('Employee added successfully! Redirecting...', 'success');
-                setTimeout(() => { window.location.href = 'index.html'; }, 1500);
-            } else {
-                showToast('Add failed: ' + (json.message || 'unknown error'), 'error');
-            }
-        } catch (err) {
-            showToast('Network error: ' + err.message, 'error');
-        } finally {
-            submitBtn.disabled = false;
-            setLoading(false);
-        }
-    });
-</script>
-</body>
-</html>
+                <div class="form-group"><label><i class="fas fa-key"></i> GSIS No.</label><input type="text
