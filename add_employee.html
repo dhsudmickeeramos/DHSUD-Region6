@@ -27,7 +27,7 @@
         </div>
         
         <div class="nav-menu">
-            <a href="index_.html" class="btn-secondary"><i class="fas fa-list-ul"></i> Employee List</a>
+            <a href="index.html" class="btn-secondary"><i class="fas fa-list-ul"></i> Employee List</a>
             <a href="add_employee.html" class="btn-secondary active-nav"><i class="fas fa-user-plus"></i> Add Employee</a>
             <a href="payslip.html" class="btn-secondary"><i class="fas fa-file-invoice-dollar"></i> Generate Payslip</a>
         </div>
@@ -137,7 +137,7 @@
             
             if (json.success) {
                 showToast('Employee added successfully! Redirecting...', 'success');
-                setTimeout(() => { window.location.href = 'index_.html'; }, 1500);
+                setTimeout(() => { window.location.href = 'index.html'; }, 1500);
             } else {
                 showToast('Add failed: ' + (json.message || 'unknown error'), 'error');
             }
