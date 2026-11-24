@@ -109,140 +109,78 @@
 
 <div id="toast" class="toast"></div>
 
+<!-- Replace the <script> block at the bottom with this: -->
 <script>
-    const SUPABASE_URL = 'YOUR_SUPABASE_PROJECT_URL';
-    const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+    // ⚠️ PASTE YOUR ANON PUBLIC KEY HERE
+    const SUPABASE_URL = 'https://metjroxqprjoozjlazyu.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_w_DtUQPdUc0gt_SJQRYWXQ_r3J1-3yp'; 
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    
     const API_URL = 'https://script.google.com/macros/s/AKfycbyXu6iWw1Bp4TqR9toiWbCjGRhwKAkMrzSqBB0x6diHP36lz4Imk0LLRx77nbWstIZ6jw/exec';
-
-    let allEmployees = [];
-
-    async function checkAuth() {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session) { window.location.href = 'login.html'; return; }
-        const { data: roleData } = await supabase.from('user_roles').select('role').eq('id', session.user.id).single();
-        if (roleData.role !== 'admin') { window.location.href = 'employee_dashboard.html'; }
-    }
 
     async function logout() {
         await supabase.auth.signOut();
         window.location.href = 'login.html';
     }
 
-    function showToast(message, type = 'info') {
-        const toast = document.getElementById('toast');
-        toast.className = `toast ${type} show`;
-        toast.innerHTML = `<i class="fas fa-info-circle"></i> ${message}`;
-        setTimeout(() => toast.classList.remove('show'), 3500);
-    }
-
-    function openModal() {
-        document.getElementById('employeeModal').classList.add('active');
-        document.getElementById('employeeForm').reset();
-    }
-
-    function closeModal() {
-        document.getElementById('employeeModal').classList.remove('active');
-    }
-
-    async function fetchEmployees() {
-        const tbody = document.getElementById('tableBody');
-        tbody.innerHTML = '<tr class="empty-row"><td colspan="5" style="text-align:center;"><i class="fas fa-circle-notch fa-spin"></i> Loading...</td></tr>';
-        try {
-            const res = await fetch(`${API_URL}?action=list`);
-            const json = await res.json();
-            if (json.success) {
-                allEmployees = json.data || [];
-                renderTable(allEmployees);
-            }
-        } catch (err) {
-            showToast('Error loading data', 'error');
+    async function loadDashboard() {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) { window.location.href = 'login.html'; return; }
+        
+        const { data: roleData } = await supabase.from('user_roles').select('role').eq('id', session.user.id).single();
+        
+        // Security check: Prevent admins from using employee view
+        if (roleData && roleData.role !== 'employee') { 
+            window.location.href = 'admin_dashboard.html'; 
+            return; 
         }
-    }
 
-    function renderTable(data) {
-        const tbody = document.getElementById('tableBody');
-        if (data.length === 0) {
-            tbody.innerHTML = '<tr class="empty-row"><td colspan="5" style="text-align:center;">No employees found.</td></tr>';
-            return;
-        }
-        tbody.innerHTML = data.map(emp => `
-            <tr>
-                <td><strong>${emp['EMPLOYEE NO.'] || ''}</strong></td>
-                <td>${emp['Complete Name'] || ''}</td>
-                <td>${emp['Email Address'] || ''}</td>
-                <td>${emp['Position'] || ''}</td>
-                <td>${emp['Employment Status'] || ''}</td>
-            </tr>
-        `).join('');
-    }
-
-    // Handle Form Submission
-    document.getElementById('employeeForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const btn = document.getElementById('saveBtn');
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Creating Account...';
-
-        const payload = {
-            action: 'add',
-            'Complete Name': document.getElementById('fullName').value,
-            'Email Address': document.getElementById('email').value,
-            'Address': document.getElementById('address').value,
-            'Birthday': document.getElementById('birthday').value,
-            'Blood Type': document.getElementById('bloodType').value,
-            'Contact Number': document.getElementById('contactNo').value,
-            'Emergency Person': document.getElementById('emergencyPerson').value,
-            'Emergency No.': document.getElementById('emergencyNo').value,
-            'Position': document.getElementById('position').value,
-            'Salary Grade': document.getElementById('salaryGrade').value,
-            'Salary': document.getElementById('salary').value,
-            'Division': document.getElementById('division').value,
-            'Employment Status': document.getElementById('employmentStatus').value,
-            'Start Date': document.getElementById('startDate').value,
-            'Profession': document.getElementById('profession').value,
-            'PRC No.': document.getElementById('prcNo').value,
-            'GSIS No.': document.getElementById('gsisNo').value,
-            'SSS No.': document.getElementById('sssNo').value,
-            'TIN No.': document.getElementById('tinNo').value,
-            'Pag-IBIG No.': document.getElementById('pagibigNo').value,
-            'PhilHealth No.': document.getElementById('philhealthNo').value
-        };
+        const userEmail = session.user.email;
 
         try {
-            const body = new URLSearchParams(payload);
-            const res = await fetch(API_URL, { method: 'POST', body });
+            const res = await fetch(`${API_URL}?action=getByEmail&email=${encodeURIComponent(userEmail)}`);
             const json = await res.json();
             
-            if (json.success) {
-                showToast(`Success! Created Account for ${payload['Complete Name']}. Default Password: DHSUD@2026`, 'success');
-                closeModal();
-                fetchEmployees();
+            if (json.success && json.data) {
+                const data = json.data;
+                document.getElementById('welcomeName').textContent = `Welcome, ${data['Complete Name']}`;
+                document.getElementById('empNo').value = data['EMPLOYEE NO.'] || '';
+                document.getElementById('email').value = data['Email Address'] || userEmail;
+                document.getElementById('position').value = data['Position'] || '';
+                document.getElementById('division').value = data['Division'] || '';
+                document.getElementById('status').value = data['Employment Status'] || '';
+                document.getElementById('salaryGrade').value = data['Salary Grade'] || '';
+                document.getElementById('contactNo').value = data['Contact Number'] || '';
             } else {
-                showToast('Failed: ' + json.message, 'error');
+                document.getElementById('welcomeName').textContent = 'Employee Record Not Found';
             }
         } catch (err) {
-            showToast('Network error: ' + err.message, 'error');
-        } finally {
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-save"></i> Save Employee & Create Account';
+            console.error("API Error:", err);
         }
-    });
 
-    // Search functionality
-    document.getElementById('searchBox').addEventListener('input', (e) => {
-        const q = e.target.value.toLowerCase();
-        const filtered = allEmployees.filter(emp => 
-            String(emp['Complete Name']).toLowerCase().includes(q) || 
-            String(emp['EMPLOYEE NO.']).toLowerCase().includes(q)
-        );
-        renderTable(filtered);
-    });
+        // Fetch Payslips
+        const { data: payslips } = await supabase
+            .from('payslips')
+            .select('*')
+            .eq('employee_email', userEmail)
+            .order('created_at', { ascending: false });
 
-    document.addEventListener('DOMContentLoaded', async () => {
-        await checkAuth();
-        fetchEmployees();
-    });
+        if (payslips && payslips.length > 0) {
+            document.getElementById('payslipBody').innerHTML = payslips.map(p => `
+                <tr>
+                    <td>${p.month_year}</td>
+                    <td>${new Date(p.created_at).toLocaleDateString()}</td>
+                    <td style="text-align: center;">
+                        <a href="${p.file_url}" target="_blank" class="btn-secondary" style="font-size: 0.75rem; padding: 0.4rem 0.8rem; text-decoration: none;">
+                            <i class="fas fa-download"></i> Download PDF
+                        </a>
+                    </td>
+                </tr>
+            `).join('');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadDashboard);
 </script>
 </body>
 </html>
