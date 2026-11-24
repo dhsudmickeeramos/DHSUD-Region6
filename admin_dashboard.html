@@ -11,29 +11,56 @@
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 1rem; }
         .modal-overlay.active { display: flex; }
         .modal-content { background: #fff; width: 100%; max-width: 900px; max-height: 90vh; overflow-y: auto; border-radius: 8px; border-top: 5px solid var(--ph-blue); padding: 2rem; position: relative; }
-        .close-btn { position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.5rem; cursor: pointer; }
+        .close-btn { position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--ph-muted); }
+        .close-btn:hover { color: var(--ph-red); }
     </style>
 </head>
 <body>
-<div class="gov-topbar"><div class="gov-topbar-inner"><span><i class="fas fa-flag"></i> Republic of the Philippines</span><span class="gov-topbar-right">DHSUD Region VI · Admin</span></div></div>
+<div class="gov-topbar">
+    <div class="gov-topbar-inner">
+        <span><i class="fas fa-flag"></i> Republic of the Philippines</span>
+        <span class="gov-topbar-right">DHSUD Region VI · Admin Dashboard</span>
+    </div>
+</div>
+
 <div class="container">
     <div class="header">
-        <div class="logo-area"><img src="https://raw.githubusercontent.com/dhsudmickeeramos/DHSUD-Region6/main/DHSUD_LOGO.png" class="gov-logo"><div class="logo-text"><h1>Admin Dashboard</h1></div></div>
-        <div class="nav-menu"><button onclick="logout()" class="btn-secondary" style="border-color: var(--ph-red); color: var(--ph-red);"><i class="fas fa-sign-out-alt"></i> Logout</button></div>
+        <div class="logo-area">
+            <img src="https://raw.githubusercontent.com/dhsudmickeeramos/DHSUD-Region6/main/DHSUD_LOGO.png" alt="Logo" class="gov-logo">
+            <div class="logo-text">
+                <h1>Admin Dashboard</h1>
+                <p>Welcome, Administrator</p>
+            </div>
+        </div>
+        <div class="nav-menu">
+            <button onclick="logout()" class="btn-secondary" style="border-color: var(--ph-red); color: var(--ph-red);"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
     </div>
+
     <div class="gold-bar"></div>
+
     <div class="table-card">
         <div class="table-header">
             <h2><i class="fas fa-list-ul"></i> Employee Records</h2>
             <div style="display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap;">
                 <input type="text" id="searchBox" class="search-box" placeholder="🔍 Search...">
-                <button class="btn-primary" onclick="openModal()"><i class="fas fa-plus"></i> Add Employee</button>
+                <button class="btn-primary" onclick="openModal()" style="padding: 0.5rem 1rem; font-size: 0.85rem;"><i class="fas fa-plus"></i> Add Employee</button>
                 <button class="btn-secondary" onclick="fetchEmployees()"><i class="fas fa-sync-alt"></i> Refresh</button>
             </div>
         </div>
         <table id="employeeTable">
-            <thead><tr><th>EMPLOYEE NO.</th><th>Complete Name</th><th>Email</th><th>Position</th><th>Status</th></tr></thead>
-            <tbody id="tableBody"></tbody>
+            <thead>
+                <tr>
+                    <th>EMPLOYEE NO.</th>
+                    <th>Complete Name</th>
+                    <th>Email Address</th>
+                    <th>Position</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <tr class="empty-row"><td colspan="5" style="text-align: center;">Loading...</td></tr>
+            </tbody>
         </table>
     </div>
 </div>
@@ -53,63 +80,130 @@
                 <div class="form-group"><label>Contact Number</label><input type="text" id="contactNo" required></div>
                 <div class="form-group"><label>Employment Status</label><input type="text" id="employmentStatus" required></div>
             </div>
-            <div style="display: flex; gap: 1rem; margin-top: 1.5rem;"><button type="submit" class="btn-primary" id="saveBtn"><i class="fas fa-save"></i> Create Employee Account</button></div>
+            <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                <button type="submit" class="btn-primary" id="saveBtn"><i class="fas fa-save"></i> Create Employee Account</button>
+            </div>
         </form>
     </div>
 </div>
+
 <div id="toast" class="toast"></div>
 
 <script>
+    // ⚠️ REPLACE WITH YOUR SUPABASE ANON PUBLIC KEY
     const SUPABASE_URL = 'https://metjroxqprjoozjlazyu.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ldGpyb3hxcHJqb296amxhenl1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUzODA3NzYsImV4cCI6MjExMDk1Njc3Nn0.dswchd7qHbGItIKSzJdALDMrE8ti2XVjUEmGhRbmiEM'; 
+    const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY_HERE'; 
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    const API_URL = 'Yhttps://script.google.com/macros/s/AKfycbwiIOnBAQVErr4J4haeqlysNgtRDoXpuuCIS1lG011cMrgfCbnSGn6ciIbb2BJGhXIVCw/exec';
+    
+    // ⚠️ REPLACE WITH YOUR GOOGLE APPS SCRIPT WEB APP URL
+    const API_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
 
     let allEmployees = [];
+
     async function checkAuth() {
-        const { data: { session } } = await supabase.auth.getSession();
+        const { data: { session } } = await supabaseClient.auth.getSession();
         if (!session) { window.location.href = 'index.html'; return; }
-        const { data: roleData } = await supabase.from('user_roles').select('role').eq('id', session.user.id).single();
+        const { data: roleData } = await supabaseClient.from('user_roles').select('role').eq('id', session.user.id).maybeSingle();
         if (roleData && roleData.role !== 'admin') window.location.href = 'employee_dashboard.html';
     }
-    async function logout() { await supabase.auth.signOut(); window.location.href = 'index.html'; }
-    function openModal() { document.getElementById('employeeModal').classList.add('active'); document.getElementById('employeeForm').reset(); }
-    function closeModal() { document.getElementById('employeeModal').classList.remove('active'); }
+
+    async function logout() {
+        await supabaseClient.auth.signOut();
+        window.location.href = 'index.html';
+    }
+
+    function openModal() {
+        document.getElementById('employeeModal').classList.add('active');
+        document.getElementById('employeeForm').reset();
+    }
+
+    function closeModal() {
+        document.getElementById('employeeModal').classList.remove('active');
+    }
 
     async function fetchEmployees() {
-        document.getElementById('tableBody').innerHTML = '<tr><td colspan="5" style="text-align:center;">Loading...</td></tr>';
+        const tbody = document.getElementById('tableBody');
+        tbody.innerHTML = '<tr class="empty-row"><td colspan="5" style="text-align:center;"><i class="fas fa-circle-notch fa-spin"></i> Loading...</td></tr>';
         try {
             const res = await fetch(`${API_URL}?action=list`);
             const json = await res.json();
-            if (json.success) { allEmployees = json.data || []; renderTable(allEmployees); }
-        } catch (err) { alert('Error loading data'); }
+            if (json.success) {
+                allEmployees = json.data || [];
+                renderTable(allEmployees);
+            } else {
+                alert("Error loading: " + json.message);
+            }
+        } catch (err) {
+            alert('Error connecting to backend.');
+        }
     }
 
     function renderTable(data) {
         const tbody = document.getElementById('tableBody');
-        if (data.length === 0) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No employees found.</td></tr>'; return; }
-        tbody.innerHTML = data.map(emp => `<tr><td>${emp['EMPLOYEE NO.']||''}</td><td>${emp['Complete Name']||''}</td><td>${emp['Email Address']||''}</td><td>${emp['Position']||''}</td><td>${emp['Employment Status']||''}</td></tr>`).join('');
+        if (data.length === 0) {
+            tbody.innerHTML = '<tr class="empty-row"><td colspan="5" style="text-align:center;">No employees found.</td></tr>';
+            return;
+        }
+        tbody.innerHTML = data.map(emp => `
+            <tr>
+                <td><strong>${emp['EMPLOYEE NO.'] || ''}</strong></td>
+                <td>${emp['Complete Name'] || ''}</td>
+                <td>${emp['Email Address'] || ''}</td>
+                <td>${emp['Position'] || ''}</td>
+                <td>${emp['Employment Status'] || ''}</td>
+            </tr>
+        `).join('');
     }
 
     document.getElementById('employeeForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const btn = document.getElementById('saveBtn'); btn.disabled = true; btn.innerHTML = 'Creating...';
-        const payload = { action: 'add', 'Complete Name': document.getElementById('fullName').value, 'Email Address': document.getElementById('email').value, 'Position': document.getElementById('position').value, 'Division': document.getElementById('division').value, 'Salary Grade': document.getElementById('salaryGrade').value, 'Salary': document.getElementById('salary').value, 'Contact Number': document.getElementById('contactNo').value, 'Employment Status': document.getElementById('employmentStatus').value };
+        const btn = document.getElementById('saveBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Creating Account...';
+
+        const payload = {
+            action: 'add',
+            'Complete Name': document.getElementById('fullName').value,
+            'Email Address': document.getElementById('email').value,
+            'Position': document.getElementById('position').value,
+            'Division': document.getElementById('division').value,
+            'Salary Grade': document.getElementById('salaryGrade').value,
+            'Salary': document.getElementById('salary').value,
+            'Contact Number': document.getElementById('contactNo').value,
+            'Employment Status': document.getElementById('employmentStatus').value
+        };
+
         try {
             const res = await fetch(API_URL, { method: 'POST', body: new URLSearchParams(payload) });
             const json = await res.json();
-            if (json.success) { alert(`Success! Default password: DHSUD@2026`); closeModal(); fetchEmployees(); }
-            else alert('Failed: ' + json.message);
-        } catch (err) { alert('Network error'); }
-        finally { btn.disabled = false; btn.innerHTML = 'Create Employee Account'; }
+            if (json.success) {
+                alert(`Success! Account created.\nDefault Password: DHSUD@2026`);
+                closeModal();
+                fetchEmployees();
+            } else {
+                alert('Failed: ' + json.message);
+            }
+        } catch (err) {
+            alert('Network error');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-save"></i> Create Employee Account';
+        }
     });
 
     document.getElementById('searchBox').addEventListener('input', (e) => {
         const q = e.target.value.toLowerCase();
-        renderTable(allEmployees.filter(emp => String(emp['Complete Name']).toLowerCase().includes(q) || String(emp['EMPLOYEE NO.']).toLowerCase().includes(q)));
+        const filtered = allEmployees.filter(emp => 
+            String(emp['Complete Name']).toLowerCase().includes(q) || 
+            String(emp['EMPLOYEE NO.']).toLowerCase().includes(q)
+        );
+        renderTable(filtered);
     });
 
-    document.addEventListener('DOMContentLoaded', async () => { await checkAuth(); fetchEmployees(); });
+    document.addEventListener('DOMContentLoaded', async () => {
+        await checkAuth();
+        fetchEmployees();
+    });
 </script>
 </body>
 </html>
