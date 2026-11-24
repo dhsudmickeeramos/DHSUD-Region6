@@ -4,9 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DHSUD Region VI · Login</title>
+    <!-- 1. FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- 2. Your Custom CSS -->
     <link rel="stylesheet" href="style.css">
+    <!-- 3. Supabase SDK (Load ONCE here) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <style>
         .login-container { max-width: 400px; margin: 10vh auto; background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-top: 5px solid var(--ph-blue); }
         .login-container h2 { text-align: center; color: var(--ph-blue-dark); margin-bottom: 1.5rem; }
@@ -40,16 +44,12 @@
 </div>
 
 <script>
-    // ⚠️ REPLACE THIS WITH YOUR ACTUAL SUPABASE ANON PUBLIC KEY
+    // ⚠️ PASTE YOUR ACTUAL SUPABASE ANON PUBLIC KEY HERE
     const SUPABASE_URL = 'https://metjroxqprjoozjlazyu.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ldGpyb3hxcHJqb296amxhenl1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUzODA3NzYsImV4cCI6MjExMDk1Njc3Nn0.dswchd7qHbGItIKSzJdALDMrE8ti2XvjUEmGhRbmiEM'; 
     
-    let supabase;
-    try {
-        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    } catch (e) {
-        alert("Supabase failed to initialize. Check your URL and Anon Key.");
-    }
+    // ✅ RENAMED TO supabaseClient TO AVOID CONFLICT WITH THE CDN
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -64,8 +64,8 @@
         errorDiv.style.display = 'none';
 
         try {
-            // 1. Sign In
-            const { data: authData, error: authError } = await supabase.auth.signInWithPassword({ 
+            // 1. Sign In using supabaseClient
+            const { data: authData, error: authError } = await supabaseClient.auth.signInWithPassword({ 
                 email: email, 
                 password: password 
             });
@@ -75,21 +75,21 @@
             }
 
             // 2. Fetch Role
-            const { data: roleData, error: roleError } = await supabase
+            const { data: roleData, error: roleError } = await supabaseClient
                 .from('user_roles')
                 .select('role')
                 .eq('id', authData.user.id)
-                .maybeSingle(); // Using maybeSingle to prevent crashes if row is missing
+                .maybeSingle(); 
 
             if (roleError) {
                 throw new Error("Database Error: " + roleError.message);
             }
             
             if (!roleData) {
-                throw new Error("Account found, but no role assigned. Please ask the Admin to add your User ID to the 'user_roles' table.");
+                throw new Error("Account found, but no role assigned in the 'user_roles' table.");
             }
 
-            // 3. Redirect
+            // 3. Redirect based on role
             if (roleData.role === 'admin') {
                 window.location.href = 'admin_dashboard.html';
             } else {
