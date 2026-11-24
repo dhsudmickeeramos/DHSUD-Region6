@@ -67,9 +67,11 @@
 </div>
 
 <script>
-    const SUPABASE_URL = 'YOUR_SUPABASE_PROJECT_URL';
-    const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+    // ⚠️ PASTE YOUR ANON PUBLIC KEY HERE
+    const SUPABASE_URL = 'https://metjroxqprjoozjlazyu.supabase.co';
+    const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY_HERE'; 
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    
     const API_URL = 'https://script.google.com/macros/s/AKfycbyXu6iWw1Bp4TqR9toiWbCjGRhwKAkMrzSqBB0x6diHP36lz4Imk0LLRx77nbWstIZ6jw/exec';
 
     async function logout() {
@@ -78,17 +80,19 @@
     }
 
     async function loadDashboard() {
-        // 1. Get Logged-in User
         const { data: { session } } = await supabase.auth.getSession();
         if (!session) { window.location.href = 'login.html'; return; }
         
-        // 2. Check Role
         const { data: roleData } = await supabase.from('user_roles').select('role').eq('id', session.user.id).single();
-        if (roleData.role !== 'employee') { window.location.href = 'admin_dashboard.html'; return; }
+        
+        // Security check: Prevent admins from using employee view
+        if (roleData && roleData.role !== 'employee') { 
+            window.location.href = 'admin_dashboard.html'; 
+            return; 
+        }
 
         const userEmail = session.user.email;
 
-        // 3. Fetch Employee Data from Google Sheets using their Email
         try {
             const res = await fetch(`${API_URL}?action=getByEmail&email=${encodeURIComponent(userEmail)}`);
             const json = await res.json();
@@ -105,15 +109,13 @@
                 document.getElementById('contactNo').value = data['Contact Number'] || '';
             } else {
                 document.getElementById('welcomeName').textContent = 'Employee Record Not Found';
-                console.error("No employee found for email:", userEmail);
             }
         } catch (err) {
             console.error("API Error:", err);
         }
 
-        // 4. Fetch Payslips for this specific employee (from Supabase)
-        // Assuming you have a 'payslips' table in Supabase with columns: employee_email, month_year, file_url, created_at
-        const { data: payslips, error } = await supabase
+        // Fetch Payslips
+        const { data: payslips } = await supabase
             .from('payslips')
             .select('*')
             .eq('employee_email', userEmail)
