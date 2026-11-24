@@ -9,51 +9,88 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-<div class="gov-topbar"><div class="gov-topbar-inner"><span><i class="fas fa-flag"></i> Republic of the Philippines</span><span class="gov-topbar-right">DHSUD Region VI · Employee Portal</span></div></div>
+<div class="gov-topbar">
+    <div class="gov-topbar-inner">
+        <span><i class="fas fa-flag"></i> Republic of the Philippines</span>
+        <span class="gov-topbar-right">DHSUD Region VI · Employee Portal</span>
+    </div>
+</div>
+
 <div class="container">
     <div class="header">
-        <div class="logo-area"><img src="https://raw.githubusercontent.com/dhsudmickeeramos/DHSUD-Region6/main/DHSUD_LOGO.png" class="gov-logo"><div class="logo-text"><h1 id="welcomeName">Welcome</h1></div></div>
-        <div class="nav-menu"><button onclick="logout()" class="btn-secondary" style="border-color: var(--ph-red); color: var(--ph-red);"><i class="fas fa-sign-out-alt"></i> Logout</button></div>
+        <div class="logo-area">
+            <img src="https://raw.githubusercontent.com/dhsudmickeeramos/DHSUD-Region6/main/DHSUD_LOGO.png" alt="Logo" class="gov-logo">
+            <div class="logo-text">
+                <h1 id="welcomeName">Welcome</h1>
+                <p>Employee Dashboard</p>
+            </div>
+        </div>
+        <div class="nav-menu">
+            <button onclick="logout()" class="btn-secondary" style="border-color: var(--ph-red); color: var(--ph-red);"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
     </div>
+
     <div class="gold-bar"></div>
 
     <div class="form-card" style="margin-bottom: 2rem;">
         <h2><i class="fas fa-user-circle"></i> My Profile</h2>
         <div class="form-grid">
             <div class="form-group"><label>Employee No.</label><input type="text" id="empNo" readonly></div>
-            <div class="form-group"><label>Email</label><input type="text" id="email" readonly></div>
+            <div class="form-group"><label>Email Address</label><input type="text" id="email" readonly></div>
             <div class="form-group"><label>Position</label><input type="text" id="position" readonly></div>
             <div class="form-group"><label>Division</label><input type="text" id="division" readonly></div>
+            <div class="form-group"><label>Employment Status</label><input type="text" id="status" readonly></div>
             <div class="form-group"><label>Salary Grade</label><input type="text" id="salaryGrade" readonly></div>
             <div class="form-group"><label>Contact No.</label><input type="text" id="contactNo" readonly></div>
         </div>
     </div>
 
     <div class="table-card">
-        <div class="table-header"><h2><i class="fas fa-file-invoice-dollar"></i> My Payslips</h2></div>
-        <table><thead><tr><th>Month & Year</th><th>Date Uploaded</th><th>Action</th></tr></thead><tbody id="payslipBody"></tbody></table>
+        <div class="table-header">
+            <h2><i class="fas fa-file-invoice-dollar"></i> My Payslips</h2>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Month & Year</th>
+                    <th>Date Uploaded</th>
+                    <th style="text-align: center;">Action</th>
+                </tr>
+            </thead>
+            <tbody id="payslipBody">
+                <tr class="empty-row"><td colspan="3" style="text-align: center;">Loading payslips...</td></tr>
+            </tbody>
+        </table>
     </div>
 </div>
 
 <script>
-    const _URL = 'https://metjroxqprjoozjlazyu..co';
-    const _ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ldGpyb3hxcHJqb296amxhenl1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUzODA3NzYsImV4cCI6MjExMDk1Njc3Nn0.dswchd7qHbGItIKSzJdALDMrE8ti2XVjUEmGhRbmiEM'; 
+    // ⚠️ REPLACE WITH YOUR SUPABASE ANON PUBLIC KEY
+    const SUPABASE_URL = 'https://metjroxqprjoozjlazyu.supabase.co';
+    const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY_HERE'; 
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    const API_URL = 'https://script.google.com/macros/s/AKfycbwiIOnBAQVErr4J4haeqlysNgtRDoXpuuCIS1lG011cMrgfCbnSGn6ciIbb2BJGhXIVCw/exec'; 
+    
+    // ⚠️ REPLACE WITH YOUR GOOGLE APPS SCRIPT WEB APP URL
+    const API_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
 
-    async function logout() { await supabase.auth.signOut(); window.location.href = 'index.html'; }
+    async function logout() {
+        await supabaseClient.auth.signOut();
+        window.location.href = 'index.html';
+    }
 
     async function loadDashboard() {
-        const { data: { session } } = await supabase.auth.getSession();
+        const { data: { session } } = await supabaseClient.auth.getSession();
         if (!session) { window.location.href = 'index.html'; return; }
         
-        const { data: roleData } = await supabase.from('user_roles').select('role').eq('id', session.user.id).single();
-        if (roleData && roleData.role !== 'employee') window.location.href = 'admin_dashboard.html';
+        const { data: roleData } = await supabaseClient.from('user_roles').select('role').eq('id', session.user.id).maybeSingle();
+        if (roleData && roleData.role !== 'employee') { window.location.href = 'admin_dashboard.html'; return; }
 
         const userEmail = session.user.email;
+
         try {
             const res = await fetch(`${API_URL}?action=getByEmail&email=${encodeURIComponent(userEmail)}`);
             const json = await res.json();
+            
             if (json.success && json.data) {
                 const data = json.data;
                 document.getElementById('welcomeName').textContent = `Welcome, ${data['Complete Name']}`;
@@ -61,18 +98,39 @@
                 document.getElementById('email').value = data['Email Address'] || userEmail;
                 document.getElementById('position').value = data['Position'] || '';
                 document.getElementById('division').value = data['Division'] || '';
+                document.getElementById('status').value = data['Employment Status'] || '';
                 document.getElementById('salaryGrade').value = data['Salary Grade'] || '';
                 document.getElementById('contactNo').value = data['Contact Number'] || '';
+            } else {
+                document.getElementById('welcomeName').textContent = 'Employee Record Not Found';
             }
-        } catch (err) { console.error(err); }
+        } catch (err) {
+            console.error("API Error:", err);
+        }
 
-        const { data: payslips } = await supabase.from('payslips').select('*').eq('employee_email', userEmail).order('created_at', { ascending: false });
+        const { data: payslips } = await supabaseClient
+            .from('payslips')
+            .select('*')
+            .eq('employee_email', userEmail)
+            .order('created_at', { ascending: false });
+
         if (payslips && payslips.length > 0) {
-            document.getElementById('payslipBody').innerHTML = payslips.map(p => `<tr><td>${p.month_year}</td><td>${new Date(p.created_at).toLocaleDateString()}</td><td><a href="${p.file_url}" target="_blank">Download</a></td></tr>`).join('');
+            document.getElementById('payslipBody').innerHTML = payslips.map(p => `
+                <tr>
+                    <td>${p.month_year}</td>
+                    <td>${new Date(p.created_at).toLocaleDateString()}</td>
+                    <td style="text-align: center;">
+                        <a href="${p.file_url}" target="_blank" class="btn-secondary" style="font-size: 0.75rem; padding: 0.4rem 0.8rem; text-decoration: none;">
+                            <i class="fas fa-download"></i> Download PDF
+                        </a>
+                    </td>
+                </tr>
+            `).join('');
         } else {
-            document.getElementById('payslipBody').innerHTML = '<tr><td colspan="3" style="text-align:center;">No payslips available.</td></tr>';
+            document.getElementById('payslipBody').innerHTML = '<tr class="empty-row"><td colspan="3" style="text-align: center;">No payslips available yet.</td></tr>';
         }
     }
+
     document.addEventListener('DOMContentLoaded', loadDashboard);
 </script>
 </body>
