@@ -10,6 +10,7 @@
     <style>
         .login-container { max-width: 400px; margin: 10vh auto; background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-top: 5px solid var(--ph-blue); }
         .login-container h2 { text-align: center; color: var(--ph-blue-dark); margin-bottom: 1.5rem; }
+        .error-box { color: #c24a4a; background: #fdecee; padding: 10px; border-radius: 4px; text-align: center; margin-top: 1rem; font-size: 0.85rem; display: none; border: 1px solid #c24a4a; }
     </style>
 </head>
 <body>
@@ -18,51 +19,85 @@
         <div style="text-align: center; margin-bottom: 1.5rem;">
             <img src="https://raw.githubusercontent.com/dhsudmickeeramos/DHSUD-Region6/main/DHSUD_LOGO.png" alt="Logo" style="width: 80px;">
             <h2>DHSUD Region VI</h2>
+            <p style="color: var(--ph-muted); font-size: 0.9rem;">Employee Records System</p>
         </div>
+        
         <form id="loginForm">
             <div class="form-group">
                 <label><i class="fas fa-envelope"></i> Email Address</label>
-                <input type="email" id="email" required>
+                <input type="email" id="email" placeholder="Enter your email" required>
             </div>
             <div class="form-group" style="margin-top: 1rem;">
                 <label><i class="fas fa-lock"></i> Password</label>
-                <input type="password" id="password" required>
+                <input type="password" id="password" placeholder="Enter your password" required>
             </div>
-            <button type="submit" class="btn-primary" style="width: 100%; margin-top: 1.5rem;">
+            <button type="submit" class="btn-primary" style="width: 100%; margin-top: 1.5rem;" id="loginBtn">
                 <i class="fas fa-sign-in-alt"></i> Login
             </button>
         </form>
-        <div id="errorMessage" style="color: var(--ph-red); text-align: center; margin-top: 1rem; font-size: 0.85rem; display: none;"></div>
+        <div id="errorMessage" class="error-box"></div>
     </div>
 </div>
 
 <script>
-    // ⚠️ PASTE YOUR SUPABASE ANON KEY HERE
+    // ⚠️ REPLACE THIS WITH YOUR ACTUAL SUPABASE ANON PUBLIC KEY
     const SUPABASE_URL = 'https://metjroxqprjoozjlazyu.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ldGpyb3hxcHJqb296amxhenl1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUzODA3NzYsImV4cCI6MjExMDk1Njc3Nn0.dswchd7qHbGItIKSzJdALDMrE8ti2XVjUEmGhRbmiEM'; 
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ldGpyb3hxcHJqb296amxhenl1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUzODA3NzYsImV4cCI6MjExMDk1Njc3Nn0.dswchd7qHbGItIKSzJdALDMrE8ti2XvjUEmGhRbmiEM'; 
+    
+    let supabase;
+    try {
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    } catch (e) {
+        alert("Supabase failed to initialize. Check your URL and Anon Key.");
+    }
 
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
         e.preventDefault();
+        
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
         const errorDiv = document.getElementById('errorMessage');
-        const submitBtn = e.target.querySelector('button');
+        const submitBtn = document.getElementById('loginBtn');
         
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Authenticating...';
+        submitBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Checking...';
         errorDiv.style.display = 'none';
 
         try {
-            const { data: authData, error: authError } = await supabase.auth.signInWithPassword({ email, password });
-            if (authError) throw new Error(authError.message);
+            // 1. Sign In
+            const { data: authData, error: authError } = await supabase.auth.signInWithPassword({ 
+                email: email, 
+                password: password 
+            });
+            
+            if (authError) {
+                throw new Error("Login Failed: " + authError.message);
+            }
 
-            const { data: roleData, error: roleError } = await supabase.from('user_roles').select('role').eq('id', authData.user.id).single();
-            if (roleError) throw new Error("No role found.");
+            // 2. Fetch Role
+            const { data: roleData, error: roleError } = await supabase
+                .from('user_roles')
+                .select('role')
+                .eq('id', authData.user.id)
+                .maybeSingle(); // Using maybeSingle to prevent crashes if row is missing
 
-            if (roleData.role === 'admin') window.location.href = 'admin_dashboard.html';
-            else window.location.href = 'employee_dashboard.html';
+            if (roleError) {
+                throw new Error("Database Error: " + roleError.message);
+            }
+            
+            if (!roleData) {
+                throw new Error("Account found, but no role assigned. Please ask the Admin to add your User ID to the 'user_roles' table.");
+            }
+
+            // 3. Redirect
+            if (roleData.role === 'admin') {
+                window.location.href = 'admin_dashboard.html';
+            } else {
+                window.location.href = 'employee_dashboard.html';
+            }
+            
         } catch (err) {
+            console.error(err);
             errorDiv.textContent = err.message;
             errorDiv.style.display = 'block';
             submitBtn.disabled = false;
