@@ -13,6 +13,13 @@
         .modal-content { background: #fff; width: 100%; max-width: 900px; max-height: 90vh; overflow-y: auto; border-radius: 8px; border-top: 5px solid var(--ph-blue); padding: 2rem; position: relative; }
         .close-btn { position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--ph-muted); }
         .close-btn:hover { color: var(--ph-red); }
+        .action-btn { border: none; background: none; cursor: pointer; padding: 0.4rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.3rem; margin: 0 0.2rem; }
+        .btn-view { color: var(--ph-blue); border: 1px solid var(--ph-blue); }
+        .btn-view:hover { background: var(--ph-blue); color: #fff; }
+        .btn-delete-row { color: var(--ph-red); border: 1px solid var(--ph-red); }
+        .btn-delete-row:hover { background: var(--ph-red); color: #fff; }
+        .btn-edit { color: #1a7a3d; border: 1px solid #1a7a3d; }
+        .btn-edit:hover { background: #1a7a3d; color: #fff; }
     </style>
 </head>
 <body>
@@ -44,7 +51,7 @@
             <h2><i class="fas fa-list-ul"></i> Employee Records</h2>
             <div style="display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap;">
                 <input type="text" id="searchBox" class="search-box" placeholder="🔍 Search...">
-                <button class="btn-primary" onclick="openModal()" style="padding: 0.5rem 1rem; font-size: 0.85rem;"><i class="fas fa-plus"></i> Add Employee</button>
+                <button class="btn-primary" onclick="openAddModal()" style="padding: 0.5rem 1rem; font-size: 0.85rem;"><i class="fas fa-plus"></i> Add Employee</button>
                 <button class="btn-secondary" onclick="fetchEmployees()"><i class="fas fa-sync-alt"></i> Refresh</button>
             </div>
         </div>
@@ -56,32 +63,71 @@
                     <th>Email Address</th>
                     <th>Position</th>
                     <th>Status</th>
+                    <th style="text-align:center;">Actions</th>
                 </tr>
             </thead>
             <tbody id="tableBody">
-                <tr class="empty-row"><td colspan="5" style="text-align: center;">Loading...</td></tr>
+                <tr class="empty-row"><td colspan="6" style="text-align: center;">Loading...</td></tr>
             </tbody>
         </table>
     </div>
 </div>
 
-<div id="employeeModal" class="modal-overlay">
+<!-- ADD EMPLOYEE MODAL -->
+<div id="addModal" class="modal-overlay">
     <div class="modal-content">
-        <button class="close-btn" onclick="closeModal()"><i class="fas fa-times"></i></button>
+        <button class="close-btn" onclick="closeAddModal()"><i class="fas fa-times"></i></button>
         <h2><i class="fas fa-user-plus"></i> Add New Employee</h2>
-        <form id="employeeForm">
+        <form id="addForm">
             <div class="form-grid">
-                <div class="form-group"><label>Complete Name</label><input type="text" id="fullName" required></div>
-                <div class="form-group"><label>Email (For Login)</label><input type="email" id="email" required></div>
-                <div class="form-group"><label>Position</label><input type="text" id="position" required></div>
-                <div class="form-group"><label>Division</label><input type="text" id="division" required></div>
-                <div class="form-group"><label>Salary Grade</label><input type="text" id="salaryGrade" required></div>
-                <div class="form-group"><label>Salary</label><input type="number" id="salary" required></div>
-                <div class="form-group"><label>Contact Number</label><input type="text" id="contactNo" required></div>
-                <div class="form-group"><label>Employment Status</label><input type="text" id="employmentStatus" required></div>
+                <div class="form-group"><label>Complete Name</label><input type="text" id="addFullName" required></div>
+                <div class="form-group"><label>Email (For Login)</label><input type="email" id="addEmail" required></div>
+                <div class="form-group"><label>Position</label><input type="text" id="addPosition" required></div>
+                <div class="form-group"><label>Division</label><input type="text" id="addDivision" required></div>
+                <div class="form-group"><label>Salary Grade</label><input type="text" id="addSalaryGrade" required></div>
+                <div class="form-group"><label>Salary</label><input type="number" id="addSalary" required></div>
+                <div class="form-group"><label>Contact Number</label><input type="text" id="addContactNo" required></div>
+                <div class="form-group"><label>Employment Status</label><input type="text" id="addEmploymentStatus" required></div>
             </div>
             <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
-                <button type="submit" class="btn-primary" id="saveBtn"><i class="fas fa-save"></i> Create Employee Account</button>
+                <button type="submit" class="btn-primary" id="addSaveBtn"><i class="fas fa-save"></i> Create Employee Account</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- VIEW / EDIT MODAL -->
+<div id="viewModal" class="modal-overlay">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeViewModal()"><i class="fas fa-times"></i></button>
+        <h2><i class="fas fa-user-edit"></i> Employee Details (ID: <span id="viewId"></span>)</h2>
+        <form id="viewForm">
+            <input type="hidden" id="viewEmpId">
+            <div class="form-grid">
+                <div class="form-group"><label>Complete Name</label><input type="text" id="viewFullName" required></div>
+                <div class="form-group"><label>Email Address</label><input type="email" id="viewEmail" required></div>
+                <div class="form-group"><label>Address</label><input type="text" id="viewAddress"></div>
+                <div class="form-group"><label>Birthday</label><input type="date" id="viewBirthday"></div>
+                <div class="form-group"><label>Blood Type</label><input type="text" id="viewBloodType"></div>
+                <div class="form-group"><label>Contact Number</label><input type="text" id="viewContactNo"></div>
+                <div class="form-group"><label>Emergency Person</label><input type="text" id="viewEmergencyPerson"></div>
+                <div class="form-group"><label>Emergency No.</label><input type="text" id="viewEmergencyNo"></div>
+                <div class="form-group"><label>Position</label><input type="text" id="viewPosition"></div>
+                <div class="form-group"><label>Salary Grade</label><input type="text" id="viewSalaryGrade"></div>
+                <div class="form-group"><label>Salary</label><input type="number" id="viewSalary"></div>
+                <div class="form-group"><label>Division</label><input type="text" id="viewDivision"></div>
+                <div class="form-group"><label>Employment Status</label><input type="text" id="viewEmploymentStatus"></div>
+                <div class="form-group"><label>Start Date</label><input type="date" id="viewStartDate"></div>
+                <div class="form-group"><label>Profession</label><input type="text" id="viewProfession"></div>
+                <div class="form-group"><label>PRC No.</label><input type="text" id="viewPrcNo"></div>
+                <div class="form-group"><label>GSIS No.</label><input type="text" id="viewGsisNo"></div>
+                <div class="form-group"><label>SSS No.</label><input type="text" id="viewSssNo"></div>
+                <div class="form-group"><label>TIN No.</label><input type="text" id="viewTinNo"></div>
+                <div class="form-group"><label>Pag-IBIG No.</label><input type="text" id="viewPagibigNo"></div>
+                <div class="form-group"><label>PhilHealth No.</label><input type="text" id="viewPhilhealthNo"></div>
+            </div>
+            <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                <button type="submit" class="btn-primary" id="viewSaveBtn"><i class="fas fa-save"></i> Save Changes</button>
             </div>
         </form>
     </div>
@@ -90,12 +136,10 @@
 <div id="toast" class="toast"></div>
 
 <script>
-    // ⚠️ REPLACE WITH YOUR SUPABASE ANON PUBLIC KEY
+    // ⚠️ REPLACE WITH YOUR KEYS
     const SUPABASE_URL = 'https://metjroxqprjoozjlazyu.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ldGpyb3hxcHJqb296amxhenl1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUzODA3NzYsImV4cCI6MjExMDk1Njc3Nn0.dswchd7qHbGItIKSzJdALDMrE8ti2XVjUEmGhRbmiEM'; 
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    
-    // ⚠️ REPLACE WITH YOUR GOOGLE APPS SCRIPT WEB APP URL
     const API_URL = 'https://script.google.com/macros/s/AKfycbwiIOnBAQVErr4J4haeqlysNgtRDoXpuuCIS1lG011cMrgfCbnSGn6ciIbb2BJGhXIVCw/exec';
 
     let allEmployees = [];
@@ -112,18 +156,75 @@
         window.location.href = 'index.html';
     }
 
-    function openModal() {
-        document.getElementById('employeeModal').classList.add('active');
-        document.getElementById('employeeForm').reset();
+    // --- ADD ---
+    function openAddModal() { document.getElementById('addModal').classList.add('active'); document.getElementById('addForm').reset(); }
+    function closeAddModal() { document.getElementById('addModal').classList.remove('active'); }
+
+    // --- VIEW / EDIT ---
+    async function openViewModal(empNo) {
+        document.getElementById('viewModal').classList.add('active');
+        document.getElementById('viewId').textContent = empNo;
+        document.getElementById('viewEmpId').value = empNo;
+
+        try {
+            const res = await fetch(`${API_URL}?action=get&id=${encodeURIComponent(empNo)}`);
+            const json = await res.json();
+            if (json.success && json.data) {
+                const d = json.data;
+                document.getElementById('viewFullName').value = d['Complete Name'] || '';
+                document.getElementById('viewEmail').value = d['Email Address'] || '';
+                document.getElementById('viewAddress').value = d['Address'] || '';
+                document.getElementById('viewBirthday').value = d['Birthday'] || '';
+                document.getElementById('viewBloodType').value = d['Blood Type'] || '';
+                document.getElementById('viewContactNo').value = d['Contact Number'] || '';
+                document.getElementById('viewEmergencyPerson').value = d['Emergency Person'] || '';
+                document.getElementById('viewEmergencyNo').value = d['Emergency No.'] || '';
+                document.getElementById('viewPosition').value = d['Position'] || '';
+                document.getElementById('viewSalaryGrade').value = d['Salary Grade'] || '';
+                document.getElementById('viewSalary').value = d['Salary'] || '';
+                document.getElementById('viewDivision').value = d['Division'] || '';
+                document.getElementById('viewEmploymentStatus').value = d['Employment Status'] || '';
+                document.getElementById('viewStartDate').value = d['Start Date'] || '';
+                document.getElementById('viewProfession').value = d['Profession'] || '';
+                document.getElementById('viewPrcNo').value = d['PRC No.'] || '';
+                document.getElementById('viewGsisNo').value = d['GSIS No.'] || '';
+                document.getElementById('viewSssNo').value = d['SSS No.'] || '';
+                document.getElementById('viewTinNo').value = d['TIN No.'] || '';
+                document.getElementById('viewPagibigNo').value = d['Pag-IBIG No.'] || '';
+                document.getElementById('viewPhilhealthNo').value = d['PhilHealth No.'] || '';
+            } else {
+                alert("Could not load details: " + json.message);
+            }
+        } catch (err) {
+            alert("Error loading details: " + err.message);
+        }
+    }
+    function closeViewModal() { document.getElementById('viewModal').classList.remove('active'); }
+
+    // --- DELETE ---
+    async function deleteEmployee(empNo) {
+        if (!confirm(`Are you sure you want to delete Employee ${empNo}?`)) return;
+        try {
+            const res = await fetch(API_URL, {
+                method: 'POST',
+                body: new URLSearchParams({ action: 'delete', id: empNo })
+            });
+            const json = await res.json();
+            if (json.success) {
+                alert("Employee deleted successfully.");
+                fetchEmployees();
+            } else {
+                alert("Delete failed: " + json.message);
+            }
+        } catch (err) {
+            alert("Network error: " + err.message);
+        }
     }
 
-    function closeModal() {
-        document.getElementById('employeeModal').classList.remove('active');
-    }
-
+    // --- FETCH & RENDER ---
     async function fetchEmployees() {
         const tbody = document.getElementById('tableBody');
-        tbody.innerHTML = '<tr class="empty-row"><td colspan="5" style="text-align:center;"><i class="fas fa-circle-notch fa-spin"></i> Loading...</td></tr>';
+        tbody.innerHTML = '<tr class="empty-row"><td colspan="6" style="text-align:center;"><i class="fas fa-circle-notch fa-spin"></i> Loading...</td></tr>';
         try {
             const res = await fetch(`${API_URL}?action=list`);
             const json = await res.json();
@@ -131,7 +232,7 @@
                 allEmployees = json.data || [];
                 renderTable(allEmployees);
             } else {
-                alert("Error loading: " + json.message);
+                alert("Error: " + json.message);
             }
         } catch (err) {
             alert('Error connecting to backend.');
@@ -141,53 +242,111 @@
     function renderTable(data) {
         const tbody = document.getElementById('tableBody');
         if (data.length === 0) {
-            tbody.innerHTML = '<tr class="empty-row"><td colspan="5" style="text-align:center;">No employees found.</td></tr>';
+            tbody.innerHTML = '<tr class="empty-row"><td colspan="6" style="text-align:center;">No employees found.</td></tr>';
             return;
         }
-        tbody.innerHTML = data.map(emp => `
+        tbody.innerHTML = data.map(emp => {
+            const empNo = emp['EMPLOYEE NO.'] || '';
+            return `
             <tr>
-                <td><strong>${emp['EMPLOYEE NO.'] || ''}</strong></td>
+                <td><strong>${empNo}</strong></td>
                 <td>${emp['Complete Name'] || ''}</td>
                 <td>${emp['Email Address'] || ''}</td>
                 <td>${emp['Position'] || ''}</td>
                 <td>${emp['Employment Status'] || ''}</td>
+                <td style="text-align:center;">
+                    <button class="action-btn btn-view" onclick="openViewModal('${empNo}')"><i class="fas fa-eye"></i> View/Edit</button>
+                    <button class="action-btn btn-delete-row" onclick="deleteEmployee('${empNo}')"><i class="fas fa-trash-alt"></i> Delete</button>
+                </td>
             </tr>
-        `).join('');
+            `;
+        }).join('');
     }
 
-    document.getElementById('employeeForm').addEventListener('submit', async (e) => {
+    // --- FORM SUBMISSIONS ---
+    document.getElementById('addForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const btn = document.getElementById('saveBtn');
+        const btn = document.getElementById('addSaveBtn');
         btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Creating Account...';
+        btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Creating...';
 
         const payload = {
             action: 'add',
-            'Complete Name': document.getElementById('fullName').value,
-            'Email Address': document.getElementById('email').value,
-            'Position': document.getElementById('position').value,
-            'Division': document.getElementById('division').value,
-            'Salary Grade': document.getElementById('salaryGrade').value,
-            'Salary': document.getElementById('salary').value,
-            'Contact Number': document.getElementById('contactNo').value,
-            'Employment Status': document.getElementById('employmentStatus').value
+            'Complete Name': document.getElementById('addFullName').value,
+            'Email Address': document.getElementById('addEmail').value,
+            'Position': document.getElementById('addPosition').value,
+            'Division': document.getElementById('addDivision').value,
+            'Salary Grade': document.getElementById('addSalaryGrade').value,
+            'Salary': document.getElementById('addSalary').value,
+            'Contact Number': document.getElementById('addContactNo').value,
+            'Employment Status': document.getElementById('addEmploymentStatus').value
         };
 
         try {
             const res = await fetch(API_URL, { method: 'POST', body: new URLSearchParams(payload) });
             const json = await res.json();
             if (json.success) {
-                alert(`Success! Account created.\nDefault Password: DHSUD@2026`);
-                closeModal();
+                alert(`Success! Default Password: DHSUD@2026`);
+                closeAddModal();
                 fetchEmployees();
             } else {
                 alert('Failed: ' + json.message);
             }
         } catch (err) {
-            alert('Network error');
+            alert('Network error: ' + err.message);
         } finally {
             btn.disabled = false;
             btn.innerHTML = '<i class="fas fa-save"></i> Create Employee Account';
+        }
+    });
+
+    document.getElementById('viewForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('viewSaveBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Saving...';
+
+        const payload = {
+            action: 'update',
+            id: document.getElementById('viewEmpId').value,
+            'Complete Name': document.getElementById('viewFullName').value,
+            'Email Address': document.getElementById('viewEmail').value,
+            'Address': document.getElementById('viewAddress').value,
+            'Birthday': document.getElementById('viewBirthday').value,
+            'Blood Type': document.getElementById('viewBloodType').value,
+            'Contact Number': document.getElementById('viewContactNo').value,
+            'Emergency Person': document.getElementById('viewEmergencyPerson').value,
+            'Emergency No.': document.getElementById('viewEmergencyNo').value,
+            'Position': document.getElementById('viewPosition').value,
+            'Salary Grade': document.getElementById('viewSalaryGrade').value,
+            'Salary': document.getElementById('viewSalary').value,
+            'Division': document.getElementById('viewDivision').value,
+            'Employment Status': document.getElementById('viewEmploymentStatus').value,
+            'Start Date': document.getElementById('viewStartDate').value,
+            'Profession': document.getElementById('viewProfession').value,
+            'PRC No.': document.getElementById('viewPrcNo').value,
+            'GSIS No.': document.getElementById('viewGsisNo').value,
+            'SSS No.': document.getElementById('viewSssNo').value,
+            'TIN No.': document.getElementById('viewTinNo').value,
+            'Pag-IBIG No.': document.getElementById('viewPagibigNo').value,
+            'PhilHealth No.': document.getElementById('viewPhilhealthNo').value
+        };
+
+        try {
+            const res = await fetch(API_URL, { method: 'POST', body: new URLSearchParams(payload) });
+            const json = await res.json();
+            if (json.success) {
+                alert('Employee updated successfully!');
+                closeViewModal();
+                fetchEmployees();
+            } else {
+                alert('Update failed: ' + json.message);
+            }
+        } catch (err) {
+            alert('Network error: ' + err.message);
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
         }
     });
 
